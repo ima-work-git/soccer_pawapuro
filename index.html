@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>日本 vs チュニジア 能力値（パワプロ風）｜W杯2026 グループF 第2節</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css">
 <style>
   :root{
     --bg:#0a1733; --panel:#0f2350; --line:#1d3a72; --gold:#ffd34d; --text:#eaf2ff;
@@ -98,6 +99,8 @@
   .chip{ font-size:11px; font-weight:800; border-radius:5px; padding:3px 8px; border:1px solid; }
   .chip.gold{ color:#ffe07a; border-color:#ffd34d; background:#3a2c00; }
   .chip.blue{ color:#8fc6ff; border-color:#3a6cff; background:#0a2150; }
+  .divtag{ display:inline-block; font-size:10px; font-weight:900; border-radius:4px; padding:0 5px; margin-left:4px; }
+  .divtag.d1{ background:#1d5e36; color:#bdf0cf; } .divtag.d2{ background:#5e3a16; color:#ffd9a8; }
 
   /* ===== 俯瞰ピッチ ===== */
   #pitchView{ max-width:1100px; margin:14px auto 50px; padding:0 12px; }
@@ -106,55 +109,62 @@
   .pitch-head .fm{ font-size:12px; color:#9fb6e6; font-weight:700; }
   .pitch{
     position:relative; max-width:980px; margin:0 auto; aspect-ratio:16/10;
-    background:
-      linear-gradient(90deg,#0e7a3a 0%,#13934a 50%,#0e7a3a 100%);
-    border:3px solid #ffffffcc; border-radius:10px; overflow:hidden;
-    box-shadow:0 12px 30px #0008;
+    background:linear-gradient(90deg,#0e7a3a 0%,#13934a 50%,#0e7a3a 100%);
+    border:3px solid #ffffffcc; border-radius:10px; overflow:hidden; box-shadow:0 12px 30px #0008;
   }
   .pitch .stripe{ position:absolute; top:0; bottom:0; width:10%; background:#ffffff10; }
   .pitch .mid{ position:absolute; left:50%; top:0; bottom:0; width:2px; background:#ffffffcc; transform:translateX(-1px); }
-  .pitch .circle{ position:absolute; left:50%; top:50%; width:18%; aspect-ratio:1; border:2px solid #ffffffcc;
-    border-radius:50%; transform:translate(-50%,-50%); }
+  .pitch .circle{ position:absolute; left:50%; top:50%; width:18%; aspect-ratio:1; border:2px solid #ffffffcc; border-radius:50%; transform:translate(-50%,-50%); }
   .pitch .box{ position:absolute; top:50%; transform:translateY(-50%); width:13%; height:54%; border:2px solid #ffffffcc; }
   .pitch .box.l{ left:0; border-left:0; } .pitch .box.r{ right:0; border-right:0; }
-  .tok{
-    position:absolute; transform:translate(-50%,-50%); width:60px; text-align:center; cursor:pointer;
-    z-index:2; transition:transform .12s;
-  }
+  .tok{ position:absolute; transform:translate(-50%,-50%); width:64px; text-align:center; cursor:pointer; z-index:2; transition:transform .12s; }
   .tok:hover{ transform:translate(-50%,-50%) scale(1.12); z-index:3; }
-  .tok .dot{
-    width:38px; height:38px; margin:0 auto; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-weight:900; font-size:16px; color:#fff; border:2px solid #fff; box-shadow:0 3px 8px #0007;
-  }
+  .tok .dot{ width:38px; height:38px; margin:0 auto; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:16px; color:#fff; border:2px solid #fff; box-shadow:0 3px 8px #0007; }
   .tok.jpn .dot{ background:var(--jpn); } .tok.tun .dot{ background:var(--tun); }
-  .tok .nm{ margin-top:3px; font-size:11px; font-weight:800; color:#fff; text-shadow:0 1px 3px #000, 0 0 4px #000;
-    white-space:nowrap; }
+  .tok .nm{ margin-top:3px; font-size:11.5px; font-weight:800; color:#fff; text-shadow:0 1px 3px #000, 0 0 4px #000; white-space:nowrap; }
   .tok .rk{ font-size:10px; font-weight:900; }
 
   .benchwrap{ max-width:980px; margin:16px auto 0; }
   .benchwrap h3{ margin:0 0 8px; font-size:13px; color:#9fb6e6; letter-spacing:.05em; }
   .bench{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
-  .bchip{
-    display:flex; align-items:center; gap:7px; background:#0f2350; border:1px solid var(--line);
-    border-radius:999px; padding:5px 12px 5px 6px; cursor:pointer; font-weight:800; font-size:13px; transition:.12s;
-  }
+  .bchip{ display:flex; align-items:center; gap:7px; background:#0f2350; border:1px solid var(--line);
+    border-radius:999px; padding:5px 12px 5px 6px; cursor:pointer; font-weight:800; font-size:13px; transition:.12s; }
   .bchip:hover{ border-color:var(--gold); }
   .bchip.out{ opacity:.55; }
-  .bchip .bn{ width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-size:12px; color:#fff; }
+  .bchip .bn{ width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; }
   .bchip.jpn .bn{ background:var(--jpn); } .bchip.tun .bn{ background:var(--tun); }
 
+  /* ===== 世界地図 ===== */
+  #mapView{ max-width:1080px; margin:14px auto 50px; padding:0 14px; }
+  #worldmap{ width:100%; height:clamp(320px,52vw,520px); background:#0b1c45; border:1px solid var(--line); border-radius:12px; }
+  .maphint{ text-align:center; font-size:12px; color:#9fb6e6; margin:8px 0 16px; }
+  .countrylist{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; margin-top:6px; }
+  .country{ background:linear-gradient(180deg,#13265a,#0c1c44); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+  .country h4{ margin:0 0 8px; font-size:16px; font-weight:900; display:flex; align-items:center; gap:8px; }
+  .country h4 .cnt{ margin-left:auto; font-size:11px; color:#9fb6e6; font-weight:700; }
+  .pchips{ display:flex; flex-wrap:wrap; gap:6px; }
+  .pchip{ display:flex; align-items:center; gap:6px; border-radius:999px; padding:4px 10px 4px 5px; cursor:pointer;
+    font-size:12px; font-weight:800; border:1px solid; transition:.12s; }
+  .pchip.jpn{ background:#0e1f4d; border-color:#2c4f9e; color:#cfe0ff; }
+  .pchip.tun{ background:#3a1416; border-color:#7a2a2e; color:#ffd2d4; }
+  .pchip:hover{ border-color:var(--gold); }
+  .pchip.out{ opacity:.55; }
+  .pchip .pn{ width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; color:#fff; }
+  .pchip.jpn .pn{ background:var(--jpn); } .pchip.tun .pn{ background:var(--tun); }
+
   /* ===== モーダル ===== */
-  .overlay{ position:fixed; inset:0; background:#020817d9; display:none; align-items:center; justify-content:center;
-    padding:18px; z-index:50; }
+  .overlay{ position:fixed; inset:0; background:#020817d9; display:none; align-items:center; justify-content:center; padding:18px; z-index:5000; }
   .overlay.show{ display:flex; }
   .overlay .card{ width:100%; max-width:380px; max-height:92vh; overflow:auto; }
-  .closebtn{ position:absolute; top:14px; right:16px; z-index:60; background:#13265a; color:#fff; border:1px solid var(--line);
+  .closebtn{ position:absolute; top:14px; right:16px; z-index:6000; background:#13265a; color:#fff; border:1px solid var(--line);
     width:38px; height:38px; border-radius:50%; font-size:18px; cursor:pointer; font-weight:900; }
 
   footer{ text-align:center; padding:20px; color:#7e95c6; font-size:12px; line-height:1.7; }
   footer a{ color:var(--gold); }
   .hidden{ display:none !important; }
+  /* jsvectormap tooltip override */
+  .jvm-tooltip{ background:#0b1c45 !important; border:1px solid var(--gold) !important; color:#eaf2ff !important; font-size:12px; }
 </style>
 </head>
 <body>
@@ -176,9 +186,9 @@
 <div class="tabs" id="viewTabs">
   <button data-view="list" class="active">⚽ カード一覧</button>
   <button data-view="pitch">🗺️ 俯瞰フォーメーション</button>
+  <button data-view="map">🌍 所属国マップ</button>
 </div>
 
-<!-- カード一覧用サブコントロール -->
 <div class="subcontrols" id="listControls">
   <div class="seg" id="teamSeg">
     <button data-team="japan" class="active">🇯🇵 日本</button>
@@ -191,11 +201,12 @@
   </div>
 </div>
 
-<div class="legend">
+<div class="legend" id="legend">
   ランク目安：
   <span style="color:#ff5a5a;">S</span><span style="color:#ff8a3d;">A</span><span style="color:#ffd34d;">B</span>
   <span style="color:#a6e34d;">C</span><span style="color:#4dd2ff;">D</span><span style="color:#6aa0ff;">E</span>
   ／ <span style="color:#ffe07a;">金特＝長所</span><span style="color:#8fc6ff;">青特＝弱点</span>
+  ／ <span class="divtag d1">1部</span><span class="divtag d2">2部</span>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -221,19 +232,27 @@
   </div>
 </div>
 
+<!-- 世界地図 -->
+<div id="mapView" class="hidden">
+  <div id="worldmap"></div>
+  <div class="maphint">📍 マーカーにカーソルを合わせるとその国でプレーする選手が表示されます（青=日本／赤=チュニジア）。下の一覧の選手チップをクリックすると能力値カードが開きます。</div>
+  <div class="countrylist" id="countrylist"></div>
+</div>
+
 <div class="overlay" id="overlay">
   <button class="closebtn" id="closeBtn">×</button>
   <div id="modalBody"></div>
 </div>
 
 <footer>
-  日本の確定スタメン・背番号・所属は2026年6月21日時点の公開情報に基づきます。チュニジアは試合前の予想XI（背番号は推定）。<br>
+  日本の確定スタメン・背番号・所属クラブ・所属リーグの部は2026年6月21日時点の公開情報に基づきます（2025-26シーズン基準）。チュニジアは試合前の予想XI（背番号は推定）。<br>
   能力値・特殊能力は各選手の実績を踏まえたファンメイド査定で、公式データではありません。<br>
   Generated for <strong>soccer_pawapuro</strong> ・ Deployed on GitHub Pages
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"></script>
 <script>
-/* ====== ランク変換 ====== */
 function rank(v){
   if(v>=90) return {l:"S",c:"#ff5a5a"};
   if(v>=80) return {l:"A",c:"#ff8a3d"};
@@ -245,184 +264,191 @@ function rank(v){
   return {l:"G",c:"#9aa6c2"};
 }
 
-/* ====== データ ====== x,y はピッチ上の絶対座標(%) 先発のみ ====== */
+/* 国マスタ（表示名→旗・座標[lat,lng]） */
+const COUNTRY = {
+  "イタリア":{f:"🇮🇹",co:[41.9,12.5]}, "オランダ":{f:"🇳🇱",co:[52.1,5.3]},
+  "ドイツ":{f:"🇩🇪",co:[51.2,10.4]}, "ベルギー":{f:"🇧🇪",co:[50.6,4.7]},
+  "イングランド":{f:"🏴",co:[52.5,-1.5]}, "フランス":{f:"🇫🇷",co:[46.6,2.3]},
+  "スペイン":{f:"🇪🇸",co:[40.2,-3.7]}, "カタール":{f:"🇶🇦",co:[25.3,51.2]},
+  "日本":{f:"🇯🇵",co:[36.2,138.3]}, "スコットランド":{f:"🏴",co:[56.5,-4.2]},
+  "デンマーク":{f:"🇩🇰",co:[55.7,12.4]}, "トルコ":{f:"🇹🇷",co:[39.0,35.2]},
+  "エジプト":{f:"🇪🇬",co:[26.8,30.8]}, "チュニジア":{f:"🇹🇳",co:[34.0,9.0]}
+};
+
+/* ====== データ（x,y=ピッチ座標% 先発のみ／c=所属国／div=部） ====== */
 const JPN = { key:"japan", cls:"", name:"日本", flag:"🇯🇵", formation:"3-4-2-1", players:[
-  // --- 先発XI ---
-  { no:1, pos:"GK", name:"鈴木 彩艶", en:"Z.SUZUKI", club:"パルマ（伊）", ovr:81, role:"start", x:5, y:50,
+  { no:1, pos:"GK", name:"鈴木 彩艶", en:"Z.SUZUKI", club:"パルマ", c:"イタリア", div:"1部", ovr:81, role:"start", x:5, y:50,
     stats:{ "セービング":84,"反応":86,"ハイボール":78,"キック":83,"統率":74,"スタミナ":72 },
     note:"190cmの体格と長いリーチを持つ守護神。セリエAで主力を張り森保Jの正GKに定着。",
     specials:[{t:"守護神",k:"gold"},{t:"高身長",k:"gold"},{t:"足元◎",k:"gold"}] },
-  { no:22, pos:"CB", name:"冨安 健洋", en:"TOMIYASU", club:"アヤックス（蘭）", ovr:84, role:"start", x:15, y:26,
+  { no:22, pos:"CB", name:"冨安 健洋", en:"TOMIYASU", club:"アヤックス", c:"オランダ", div:"1部", ovr:84, role:"start", x:15, y:26,
     stats:{ "ディフェンス":86,"対人守備":87,"スピード":78,"フィジカル":82,"ヘディング":80,"ビルドアップ":80 },
     note:"両サイドとCBをこなすユーティリティ。プレミアで磨いた対人守備は世界級。難点は故障の多さ。",
     specials:[{t:"鉄壁",k:"gold"},{t:"ユーティリティ",k:"gold"},{t:"対人◎",k:"gold"},{t:"故障持ち",k:"blue"}] },
-  { no:4, pos:"CB", name:"板倉 滉", en:"ITAKURA", club:"アヤックス（蘭）", ovr:82, role:"start", x:15, y:50, captain:true,
+  { no:4, pos:"CB", name:"板倉 滉", en:"ITAKURA", club:"アヤックス", c:"オランダ", div:"1部", ovr:82, role:"start", x:15, y:50, captain:true,
     stats:{ "ディフェンス":83,"対人守備":82,"スピード":77,"フィジカル":81,"ビルドアップ":84,"統率":85 },
     note:"精密なロングフィードと統率力を備える主将。最終ラインの司令塔として中央を締める。",
     specials:[{t:"扇の要",k:"gold"},{t:"精密フィード",k:"gold"},{t:"キャプテンシー",k:"gold"}] },
-  { no:21, pos:"CB", name:"伊藤 洋輝", en:"H.ITO", club:"バイエルン（独）", ovr:81, role:"start", x:15, y:74,
+  { no:21, pos:"CB", name:"伊藤 洋輝", en:"H.ITO", club:"バイエルン", c:"ドイツ", div:"1部", ovr:81, role:"start", x:15, y:74,
     stats:{ "ディフェンス":81,"対人守備":79,"スピード":73,"フィジカル":80,"ビルドアップ":86,"ヘディング":81 },
     note:"左利きの長身CB。バイエルン所属、精度抜群の左足から組み立てを牽引。長期離脱の過去も。",
     specials:[{t:"左足の名手",k:"gold"},{t:"精密パス",k:"gold"},{t:"高さ",k:"gold"},{t:"故障持ち",k:"blue"}] },
-  { no:14, pos:"RWB", name:"伊東 純也", en:"J.ITO", club:"ヘンク（白）", ovr:85, role:"start", x:27, y:9,
+  { no:14, pos:"RWB", name:"伊東 純也", en:"J.ITO", club:"ヘンク", c:"ベルギー", div:"1部", ovr:85, role:"start", x:27, y:9,
     stats:{ "スピード":93,"ドリブル":86,"クロス":87,"決定力":75,"スタミナ":86,"フィジカル":72 },
     note:"日本最速級のスプリントと高速クロスを誇る右の生命線。代表アシスト量産の韋駄天WG。",
     specials:[{t:"韋駄天",k:"gold"},{t:"高速クロス",k:"gold"},{t:"アシスト職人",k:"gold"}] },
-  { no:7, pos:"CH", name:"田中 碧", en:"A.TANAKA", club:"リーズ（英）", ovr:82, role:"start", x:28, y:39,
+  { no:7, pos:"CH", name:"田中 碧", en:"A.TANAKA", club:"リーズ", c:"イングランド", div:"1部", ovr:82, role:"start", x:28, y:39,
     stats:{ "パス":84,"ボール奪取":80,"展開力":83,"ドリブル":78,"視野":84,"スタミナ":85 },
-    note:"カタールW杯スペイン戦で決勝点を演出した勝負強さ。リーズで昇格を経験したボックス型MF。",
+    note:"カタールW杯スペイン戦で決勝点を演出した勝負強さ。リーズで昇格後も主力のボックス型MF。",
     specials:[{t:"ゲームメイク",k:"gold"},{t:"勝負強さ",k:"gold"},{t:"広い視野",k:"gold"}] },
-  { no:24, pos:"CH", name:"佐野 海舟", en:"K.SANO", club:"マインツ（独）", ovr:82, role:"start", x:28, y:61,
+  { no:24, pos:"CH", name:"佐野 海舟", en:"K.SANO", club:"マインツ", c:"ドイツ", div:"1部", ovr:82, role:"start", x:28, y:61,
     stats:{ "ボール奪取":88,"対人守備":84,"フィジカル":82,"スタミナ":88,"パス":78,"展開力":78 },
     note:"無尽蔵のスタミナと球際の強さでブンデスでも評価急騰。中盤を制圧するボールハンター。",
     specials:[{t:"デュエル王",k:"gold"},{t:"無尽蔵",k:"gold"},{t:"球際◎",k:"gold"}] },
-  { no:13, pos:"LWB", name:"中村 敬斗", en:"K.NAKAMURA", club:"ランス（仏）", ovr:82, role:"start", x:27, y:91,
+  { no:13, pos:"LWB", name:"中村 敬斗", en:"K.NAKAMURA", club:"ランス", c:"フランス", div:"2部", ovr:82, role:"start", x:27, y:91,
     stats:{ "ドリブル":84,"スピード":85,"決定力":82,"クロス":78,"フィジカル":70,"スタミナ":80 },
-    note:"リーグ・アンで二桁得点を狙う左の仕掛け役。鋭い左足ドリブルと一発の決定力が武器。",
+    note:"鋭い左足ドリブルと一発の決定力が武器の左の仕掛け役。所属ランスは25-26はリーグ・アン2部。",
     specials:[{t:"切れ味ドリブル",k:"gold"},{t:"左足一閃",k:"gold"},{t:"一発",k:"gold"}] },
-  { no:10, pos:"OMF", name:"堂安 律", en:"DOAN", club:"フランクフルト（独）", ovr:84, role:"start", x:38, y:34,
+  { no:10, pos:"OMF", name:"堂安 律", en:"DOAN", club:"フランクフルト", c:"ドイツ", div:"1部", ovr:84, role:"start", x:38, y:34,
     stats:{ "決定力":83,"ドリブル":82,"パス":81,"ミドル":85,"勝負強さ":88,"スタミナ":82 },
     note:"カタールW杯でドイツ・スペイン両戦にゴール。大舞台で輝く背番号10のクラッチシューター。",
     specials:[{t:"大舞台◎",k:"gold"},{t:"ミドルシュート",k:"gold"},{t:"勝負師",k:"gold"}] },
-  { no:15, pos:"OMF", name:"鎌田 大地", en:"KAMADA", club:"クリスタル・パレス（英）", ovr:83, role:"start", x:38, y:66,
+  { no:15, pos:"OMF", name:"鎌田 大地", en:"KAMADA", club:"クリスタル・パレス", c:"イングランド", div:"1部", ovr:83, role:"start", x:38, y:66,
     stats:{ "パス":85,"決定力":81,"ドリブル":81,"キープ":85,"視野":86,"ミドル":83 },
     note:"EL制覇の実績を持つ技巧派。柔らかいトラップとアイディアで前線にリズムを生むシャドー。",
     specials:[{t:"トラップ名人",k:"gold"},{t:"アイディア",k:"gold"},{t:"キープ力",k:"gold"}] },
-  { no:18, pos:"CF", name:"上田 綺世", en:"UEDA", club:"フェイエノールト（蘭）", ovr:83, role:"start", x:45, y:50,
+  { no:18, pos:"CF", name:"上田 綺世", en:"UEDA", club:"フェイエノールト", c:"オランダ", div:"1部", ovr:83, role:"start", x:45, y:50,
     stats:{ "決定力":85,"ポストプレー":80,"スピード":79,"ヘディング":83,"フィジカル":80,"オフザボール":84 },
     note:"エールディビジで得点を量産する点取り屋。鋭い抜け出しと決定力でゴールを陥れるCF。",
     specials:[{t:"ゴールハンター",k:"gold"},{t:"ヘディング◎",k:"gold"},{t:"抜け出し",k:"gold"}] },
-  // --- 控え ---
-  { no:8, pos:"OMF", name:"久保 建英", en:"KUBO", club:"R.ソシエダ（西）", ovr:86, role:"bench", out:true,
+  { no:8, pos:"OMF", name:"久保 建英", en:"KUBO", club:"R.ソシエダ", c:"スペイン", div:"1部", ovr:86, role:"bench", out:true,
     stats:{ "ドリブル":88,"パス":84,"決定力":81,"スピード":82,"視野":86,"フィジカル":70 },
     note:"左ひざ負傷で本戦は欠場。本来はラ・リーガで違いを生む日本の至宝。右足の精度と仕掛けは別格。",
     specials:[{t:"天才ドリブラー",k:"gold"},{t:"司令塔",k:"gold"},{t:"右足の名手",k:"gold"},{t:"負傷欠場",k:"blue"}] },
-  { no:6, pos:"DMF", name:"遠藤 航", en:"ENDO", club:"リバプール（英）", ovr:84, role:"bench",
+  { no:6, pos:"DMF", name:"遠藤 航", en:"ENDO", club:"リバプール", c:"イングランド", div:"1部", ovr:84, role:"bench",
     stats:{ "ボール奪取":87,"対人守備":86,"パス":81,"フィジカル":83,"展開力":81,"スタミナ":84 },
     note:"リバプールでリーグ制覇を経験したアンカー。デュエルの鬼にして精神的支柱。",
     specials:[{t:"デュエル王",k:"gold"},{t:"壁",k:"gold"},{t:"闘志",k:"gold"}] },
-  { no:11, pos:"FW", name:"前田 大然", en:"D.MAEDA", club:"セルティック（蘇）", ovr:81, role:"bench",
+  { no:11, pos:"FW", name:"前田 大然", en:"D.MAEDA", club:"セルティック", c:"スコットランド", div:"1部", ovr:81, role:"bench",
     stats:{ "スピード":92,"スタミナ":88,"ドリブル":78,"決定力":76,"プレッシング":90,"フィジカル":74 },
     note:"セルティックでタイトル量産。圧倒的なスプリントと前線守備でスイッチを入れる韋駄天FW。",
     specials:[{t:"韋駄天",k:"gold"},{t:"鬼プレス",k:"gold"},{t:"無尽蔵",k:"gold"}] },
-  { no:2, pos:"RB", name:"菅原 由勢", en:"SUGAWARA", club:"サウサンプトン（英）", ovr:79, role:"bench",
+  { no:2, pos:"RB", name:"菅原 由勢", en:"SUGAWARA", club:"サウサンプトン", c:"イングランド", div:"2部", ovr:79, role:"bench",
     stats:{ "ディフェンス":76,"対人守備":75,"スピード":80,"クロス":80,"スタミナ":84,"フィジカル":72 },
-    note:"攻撃的右SB。果敢なオーバーラップと精度あるクロスでサイドに推進力を加える。",
+    note:"攻撃的右SB。果敢なオーバーラップと精度あるクロスが武器。所属サウサンプトンは25-26はチャンピオンシップ。",
     specials:[{t:"オーバーラップ",k:"gold"},{t:"スタミナ",k:"gold"}] },
-  { no:16, pos:"CB", name:"渡辺 剛", en:"T.WATANABE", club:"フェイエノールト（蘭）", ovr:80, role:"bench",
+  { no:16, pos:"CB", name:"渡辺 剛", en:"T.WATANABE", club:"フェイエノールト", c:"オランダ", div:"1部", ovr:80, role:"bench",
     stats:{ "ディフェンス":81,"対人守備":81,"スピード":76,"フィジカル":81,"ビルドアップ":78,"ヘディング":80 },
     note:"オランダ戦に先発した対人に強いCB。高さと球際で最終ラインを支える。",
     specials:[{t:"対人○",k:"gold"},{t:"高さ",k:"gold"}] },
-  { no:3, pos:"CB", name:"谷口 彰悟", en:"TANIGUCHI", club:"アル・ラーヤン（カタール）", ovr:79, role:"bench",
+  { no:3, pos:"CB", name:"谷口 彰悟", en:"TANIGUCHI", club:"アル・ラーヤン", c:"カタール", div:"1部", ovr:79, role:"bench",
     stats:{ "ディフェンス":81,"対人守備":80,"スピード":68,"フィジカル":80,"ヘディング":82,"統率":82 },
     note:"経験豊富な統率型CB。空中戦の強さと読みでラインを落ち着かせるベテラン。",
     specials:[{t:"統率",k:"gold"},{t:"ヘディング○",k:"gold"},{t:"経験",k:"gold"}] },
-  { no:5, pos:"LB", name:"長友 佑都", en:"NAGATOMO", club:"FC東京", ovr:74, role:"bench",
+  { no:5, pos:"LB", name:"長友 佑都", en:"NAGATOMO", club:"FC東京", c:"日本", div:"1部", ovr:74, role:"bench",
     stats:{ "スピード":72,"スタミナ":82,"対人守備":75,"フィジカル":74,"クロス":72,"経験":99 },
     note:"5大会連続W杯のレジェンド。衰えぬ走力と不屈の闘志でチームを鼓舞するムードメーカー。",
     specials:[{t:"レジェンド",k:"gold"},{t:"ムードメーカー",k:"gold"},{t:"不屈",k:"gold"},{t:"年齢",k:"blue"}] },
-  { no:20, pos:"CB", name:"瀬古 歩夢", en:"SEKO", club:"ル・アーヴル（仏）", ovr:77, role:"bench",
+  { no:20, pos:"CB", name:"瀬古 歩夢", en:"SEKO", club:"ル・アーヴル", c:"フランス", div:"1部", ovr:77, role:"bench",
     stats:{ "ディフェンス":78,"対人守備":77,"スピード":75,"フィジカル":76,"ビルドアップ":79,"ヘディング":76 },
     note:"リーグ・アンで研鑽を積む若手CB。落ち着いた対応とビルドアップ参加が持ち味。",
     specials:[{t:"冷静",k:"gold"},{t:"ビルドアップ",k:"gold"}] },
-  { no:25, pos:"DF", name:"鈴木 淳之介", en:"J.SUZUKI", club:"コペンハーゲン（丁）", ovr:76, role:"bench",
+  { no:25, pos:"DF", name:"鈴木 淳之介", en:"J.SUZUKI", club:"コペンハーゲン", c:"デンマーク", div:"1部", ovr:76, role:"bench",
     stats:{ "ディフェンス":75,"対人守備":74,"スピード":80,"フィジカル":72,"クロス":74,"スタミナ":82 },
     note:"左サイドをこなす伸び盛りの若手。スピードと運動量でアップダウンを繰り返す。",
     specials:[{t:"快足",k:"gold"},{t:"将来性",k:"gold"}] },
-  { no:17, pos:"MF", name:"鈴木 唯人", en:"Y.SUZUKI", club:"ブレンビー（丁）", ovr:79, role:"bench",
+  { no:17, pos:"MF", name:"鈴木 唯人", en:"Y.SUZUKI", club:"ブレンビー", c:"デンマーク", div:"1部", ovr:79, role:"bench",
     stats:{ "ドリブル":82,"パス":80,"決定力":79,"視野":81,"スピード":80,"フィジカル":70 },
     note:"創造性豊かなアタッカー。ひらめきのあるドリブルとラストパスで違いを作る。",
     specials:[{t:"技巧派",k:"gold"},{t:"ひらめき",k:"gold"}] },
-  { no:19, pos:"FW", name:"小川 航基", en:"K.OGAWA", club:"NEC（蘭）", ovr:80, role:"bench",
+  { no:19, pos:"FW", name:"小川 航基", en:"K.OGAWA", club:"NEC", c:"オランダ", div:"1部", ovr:80, role:"bench",
     stats:{ "決定力":82,"ヘディング":83,"ポストプレー":80,"フィジカル":81,"スピード":75,"オフザボール":80 },
     note:"エールディビジで点を取る大型FW。高さとポストプレーで起点になれるゴールハンター。",
     specials:[{t:"ヘディング○",k:"gold"},{t:"ゴールハンター",k:"gold"},{t:"高さ",k:"gold"}] },
-  { no:9, pos:"FW", name:"後藤 啓介", en:"GOTO", club:"シント＝トロイデン（白）", ovr:76, role:"bench",
+  { no:9, pos:"FW", name:"後藤 啓介", en:"GOTO", club:"シント＝トロイデン", c:"ベルギー", div:"1部", ovr:76, role:"bench",
     stats:{ "決定力":78,"ヘディング":80,"ポストプレー":78,"スピード":76,"フィジカル":80,"オフザボール":76 },
     note:"代表最年少クラスの大型FW。高さと体の強さを備える次世代のストライカー。",
     specials:[{t:"大型FW",k:"gold"},{t:"将来性",k:"gold"}] },
-  { no:12, pos:"GK", name:"大迫 敬介", en:"OSAKO", club:"サンフレッチェ広島", ovr:76, role:"bench",
+  { no:12, pos:"GK", name:"大迫 敬介", en:"OSAKO", club:"サンフレッチェ広島", c:"日本", div:"1部", ovr:76, role:"bench",
     stats:{ "セービング":78,"反応":79,"ハイボール":76,"キック":75,"統率":74,"スタミナ":70 },
     note:"Jリーグ屈指の安定感を誇る第2GK。反応の速さとハイボール処理に定評。",
     specials:[{t:"安定感",k:"gold"}] },
-  { no:23, pos:"GK", name:"早川 友基", en:"HAYAKAWA", club:"鹿島アントラーズ", ovr:75, role:"bench",
+  { no:23, pos:"GK", name:"早川 友基", en:"HAYAKAWA", club:"鹿島アントラーズ", c:"日本", div:"1部", ovr:75, role:"bench",
     stats:{ "セービング":77,"反応":78,"ハイボール":74,"キック":76,"統率":72,"スタミナ":70 },
     note:"Jリーグで台頭した若手GK。足元の技術とシュートストップに伸びしろ。",
     specials:[{t:"将来性",k:"gold"}] },
 ]};
 
 const TUN = { key:"tunisia", cls:"tunisia", name:"チュニジア", flag:"🇹🇳", formation:"4-2-3-1", players:[
-  // --- 予想先発XI（背番号は推定） ---
-  { no:16, pos:"GK", name:"ダフメン", en:"DAHMEN", club:"シヴァススポル（土）", ovr:76, role:"start", x:95, y:50,
+  { no:16, pos:"GK", name:"ダフメン", en:"DAHMEN", club:"シヴァススポル", c:"トルコ", div:"2部", ovr:76, role:"start", x:95, y:50,
     stats:{ "セービング":78,"反応":78,"ハイボール":76,"キック":72,"統率":74,"スタミナ":70 },
     note:"チュニジアの正GK候補。反応とシュートストップで最後の砦を担う。",
     specials:[{t:"守護神",k:"gold"}] },
-  { no:2, pos:"RB", name:"ヴァレリー", en:"VALERY", club:"アンジェ（仏）", ovr:77, role:"start", x:85, y:16,
+  { no:2, pos:"RB", name:"ヴァレリー", en:"VALERY", club:"アンジェ", c:"フランス", div:"1部", ovr:77, role:"start", x:85, y:16,
     stats:{ "ディフェンス":76,"対人守備":76,"スピード":80,"クロス":75,"フィジカル":78,"スタミナ":80 },
     note:"フランス育ちの右SB。フィジカルと上下動でサイドをカバーする。",
     specials:[{t:"運動量",k:"gold"}] },
-  { no:3, pos:"CB", name:"レキク", en:"REKIK", club:"セビージャAt.（西）", ovr:78, role:"start", x:85, y:39,
+  { no:3, pos:"CB", name:"レキク", en:"REKIK", club:"セビージャAt.", c:"スペイン", div:"2部", ovr:78, role:"start", x:85, y:39,
     stats:{ "ディフェンス":78,"対人守備":79,"スピード":78,"フィジカル":80,"ヘディング":78,"ビルドアップ":74 },
     note:"スピードと対人に強い若手CB。欧州の育成を経た守備の柱候補。",
     specials:[{t:"対人○",k:"gold"},{t:"快速CB",k:"gold"}] },
-  { no:4, pos:"CB", name:"タルビ", en:"TALBI", club:"ロリアン（仏）", ovr:79, role:"start", x:85, y:61,
+  { no:4, pos:"CB", name:"タルビ", en:"TALBI", club:"ロリアン", c:"フランス", div:"1部", ovr:79, role:"start", x:85, y:61,
     stats:{ "ディフェンス":80,"対人守備":80,"スピード":76,"フィジカル":82,"ヘディング":82,"ビルドアップ":72 },
     note:"高さと強さを備える主力CB。空中戦とセットプレーでも存在感を放つ。",
     specials:[{t:"高さ",k:"gold"},{t:"対人○",k:"gold"}] },
-  { no:5, pos:"LB", name:"アブディ", en:"ABDI", club:"ニース（仏）", ovr:77, role:"start", x:85, y:84,
+  { no:5, pos:"LB", name:"アブディ", en:"ABDI", club:"ニース", c:"フランス", div:"1部", ovr:77, role:"start", x:85, y:84,
     stats:{ "ディフェンス":76,"対人守備":75,"スピード":79,"クロス":78,"フィジカル":74,"スタミナ":82 },
     note:"攻守に走れる左SB。クロスとアップダウンで左サイドに推進力を加える。",
     specials:[{t:"運動量",k:"gold"}] },
-  { no:13, pos:"DMF", name:"ケディラ", en:"KHEDIRA", club:"U.ベルリン（独）", ovr:80, role:"start", x:73, y:40,
+  { no:13, pos:"DMF", name:"ケディラ", en:"KHEDIRA", club:"U.ベルリン", c:"ドイツ", div:"1部", ovr:80, role:"start", x:73, y:40,
     stats:{ "ボール奪取":82,"対人守備":82,"パス":78,"フィジカル":82,"展開力":76,"スタミナ":82 },
     note:"ブンデスで主力を張る守備的MF。読みと球際でバイタルを封鎖するアンカー。",
     specials:[{t:"守備職人",k:"gold"},{t:"球際",k:"gold"}] },
-  { no:15, pos:"DMF", name:"スキリ", en:"SKHIRI", club:"フランクフルト（独）", ovr:82, role:"start", x:73, y:60,
+  { no:15, pos:"DMF", name:"スキリ", en:"SKHIRI", club:"フランクフルト", c:"ドイツ", div:"1部", ovr:82, role:"start", x:73, y:60,
     stats:{ "パス":82,"ボール奪取":83,"展開力":81,"フィジカル":81,"視野":81,"スタミナ":84 },
     note:"フランクフルトの心臓。攻守に効く万能型でボックス・トゥ・ボックスに動けるエンジン。",
     specials:[{t:"万能MF",k:"gold"},{t:"無尽蔵",k:"gold"},{t:"展開力",k:"gold"}] },
-  { no:7, pos:"RWG", name:"アシュリ", en:"ACHOURI", club:"コペンハーゲン（丁）", ovr:80, role:"start", x:63, y:20,
+  { no:7, pos:"RWG", name:"アシュリ", en:"ACHOURI", club:"コペンハーゲン", c:"デンマーク", div:"1部", ovr:80, role:"start", x:63, y:20,
     stats:{ "ドリブル":82,"スピード":83,"決定力":78,"クロス":78,"スタミナ":82,"フィジカル":70 },
     note:"推進力に優れる右の仕掛け役。縦への突破とゴール関与でチャンスを作る。",
     specials:[{t:"推進力",k:"gold"},{t:"快速",k:"gold"}] },
-  { no:10, pos:"OMF", name:"メイブリ", en:"MEJBRI", club:"バーンリー（英）", ovr:81, role:"start", x:63, y:50,
+  { no:10, pos:"OMF", name:"メイブリ", en:"MEJBRI", club:"バーンリー", c:"イングランド", div:"1部", ovr:81, role:"start", x:63, y:50,
     stats:{ "ドリブル":83,"パス":82,"決定力":76,"視野":83,"キープ":81,"フィジカル":74 },
     note:"創造性と闘志を併せ持つ司令塔。テクニックとラストパスで攻撃を組み立てる。",
     specials:[{t:"司令塔",k:"gold"},{t:"テクニシャン",k:"gold"},{t:"闘志",k:"gold"}] },
-  { no:14, pos:"LWG", name:"ガルビ", en:"GHARBI", club:"アウクスブルク（独）", ovr:79, role:"start", x:63, y:80,
+  { no:14, pos:"LWG", name:"ガルビ", en:"GHARBI", club:"アウクスブルク", c:"ドイツ", div:"1部", ovr:79, role:"start", x:63, y:80,
     stats:{ "ドリブル":82,"パス":80,"決定力":76,"スピード":80,"視野":80,"フィジカル":68 },
     note:"足元に優れる技巧派ウインガー。左足の細かいタッチで局面を打開する。",
     specials:[{t:"技巧派",k:"gold"},{t:"左足",k:"gold"}] },
-  { no:11, pos:"CF", name:"サード", en:"SAAD", club:"ザンクト・パウリ（独）", ovr:79, role:"start", x:55, y:50,
+  { no:11, pos:"CF", name:"サード", en:"SAAD", club:"ザンクト・パウリ", c:"ドイツ", div:"1部", ovr:79, role:"start", x:55, y:50,
     stats:{ "ドリブル":82,"決定力":80,"スピード":82,"フィジカル":74,"オフザボール":78,"スタミナ":80 },
     note:"ドイツ育ちの仕掛けるアタッカー。スピードとドリブルで最前線から脅威を作る。",
     specials:[{t:"ドリブラー",k:"gold"},{t:"快速",k:"gold"}] },
-  // --- 控え（主な招集メンバー・推定） ---
-  { no:9, pos:"FW", name:"ジャジリ", en:"JAZIRI", club:"ザマレク（埃）", ovr:78, role:"bench",
+  { no:9, pos:"FW", name:"ジャジリ", en:"JAZIRI", club:"ザマレク", c:"エジプト", div:"1部", ovr:78, role:"bench",
     stats:{ "決定力":80,"ヘディング":78,"ポストプレー":77,"スピード":78,"フィジカル":78,"オフザボール":79 },
     note:"得点感覚に優れるストライカー。北アフリカの強豪で実績を積んだ点取り屋。",
     specials:[{t:"ゴールハンター",k:"gold"}] },
-  { no:8, pos:"DMF", name:"ライドゥニ", en:"LAIDOUNI", club:"レンヌ（仏）", ovr:80, role:"bench",
+  { no:8, pos:"DMF", name:"ライドゥニ", en:"LAIDOUNI", club:"レンヌ", c:"フランス", div:"1部", ovr:80, role:"bench",
     stats:{ "ボール奪取":83,"対人守備":82,"フィジカル":83,"パス":77,"展開力":76,"スタミナ":83 },
     note:"フィジカルと球際の強さが武器の守備的MF。中盤で潰し役を担うファイター。",
     specials:[{t:"デュエル",k:"gold"},{t:"球際◎",k:"gold"}] },
-  { no:12, pos:"LB", name:"マアルール", en:"MAALOUL", club:"アル・アハリ（埃）", ovr:78, role:"bench",
+  { no:12, pos:"LB", name:"マアルール", en:"MAALOUL", club:"アル・アハリ", c:"エジプト", div:"1部", ovr:78, role:"bench",
     stats:{ "ディフェンス":76,"クロス":80,"スピード":74,"フィジカル":74,"スタミナ":80,"経験":90 },
     note:"百戦錬磨のベテラン左SB。左足のキックとセットプレーの精度が光る。",
     specials:[{t:"左足の名手",k:"gold"},{t:"経験",k:"gold"}] },
-  { no:6, pos:"CB", name:"メリア", en:"MERIAH", club:"エスペランス（チュニジア）", ovr:77, role:"bench",
+  { no:6, pos:"CB", name:"メリア", en:"MERIAH", club:"エスペランス", c:"チュニジア", div:"1部", ovr:77, role:"bench",
     stats:{ "ディフェンス":79,"対人守備":79,"スピード":70,"フィジカル":80,"ヘディング":81,"統率":80 },
     note:"国内屈指の経験を持つCB。高さと統率で最終ラインを締めるリーダー。",
     specials:[{t:"統率",k:"gold"},{t:"高さ",k:"gold"}] },
-  { no:20, pos:"MF", name:"スリマン", en:"SLIMANE", club:"ノリッジ（英）", ovr:78, role:"bench",
+  { no:20, pos:"MF", name:"スリマン", en:"SLIMANE", club:"ノリッジ", c:"イングランド", div:"2部", ovr:78, role:"bench",
     stats:{ "パス":79,"ドリブル":78,"決定力":76,"フィジカル":78,"視野":79,"スタミナ":80 },
     note:"長身でテクニックも備える万能MF。中盤に高さと推進力を加えられる。",
     specials:[{t:"万能",k:"gold"}] },
-  { no:17, pos:"AMF", name:"ムサクニ", en:"MSAKNI", club:"アル・アラビ（カタール）", ovr:78, role:"bench",
+  { no:17, pos:"AMF", name:"ムサクニ", en:"MSAKNI", club:"アル・アラビ", c:"カタール", div:"1部", ovr:78, role:"bench",
     stats:{ "ドリブル":80,"パス":81,"決定力":79,"視野":82,"キープ":80,"フィジカル":66 },
     note:"チュニジアの象徴的アタッカー。経験と技術で流れを変えられるベテランの司令塔。",
     specials:[{t:"レジェンド",k:"gold"},{t:"テクニシャン",k:"gold"},{t:"年齢",k:"blue"}] },
-  { no:1, pos:"GK", name:"ベン・サイド", en:"BEN SAID", club:"USモナスティル（チュニジア）", ovr:74, role:"bench",
+  { no:1, pos:"GK", name:"ベン・サイド", en:"BEN SAID", club:"USモナスティル", c:"チュニジア", div:"1部", ovr:74, role:"bench",
     stats:{ "セービング":76,"反応":76,"ハイボール":74,"キック":71,"統率":73,"スタミナ":70 },
     note:"国内リーグで実績を積む控えGK。安定したハンドリングが持ち味。",
     specials:[{t:"安定感",k:"gold"}] },
@@ -430,7 +456,7 @@ const TUN = { key:"tunisia", cls:"tunisia", name:"チュニジア", flag:"🇹�
 
 const TEAMS = { japan:JPN, tunisia:TUN };
 
-/* ====== カードHTML生成 ====== */
+/* ====== カードHTML ====== */
 function cardHTML(p, team){
   const o = rank(p.ovr);
   const ab = Object.entries(p.stats).map(([k,v])=>{
@@ -440,6 +466,8 @@ function cardHTML(p, team){
       <div class="g" style="color:${r.c}">${r.l}</div></div>`;
   }).join('');
   const sp = p.specials.map(s=>`<span class="chip ${s.k}">${s.t}</span>`).join('');
+  const dcls = p.div==="1部"?"d1":"d2";
+  const cf = (COUNTRY[p.c]||{}).f || "";
   return `<div class="card ${team.cls} ${p.out?'out':''}">
     <div class="top">
       <div class="num">${p.no}</div>
@@ -447,7 +475,7 @@ function cardHTML(p, team){
         <span class="pos">${p.pos}</span>
         ${p.captain?'<span class="pos" style="background:#ff5a5a;color:#fff;">C</span>':''}
         ${p.out?'<span class="pos outtag">負傷欠場</span>':''}
-        <div class="name">${p.name}<small>${p.en} ・ ${p.club}</small></div>
+        <div class="name">${p.name}<small>${p.en} ・ ${cf} ${p.club}<span class="divtag ${dcls}">${p.div}</span></small></div>
       </div>
       <div class="ovr"><div class="lbl">総合</div><div class="rank" style="color:${o.c}">${o.l}</div></div>
     </div>
@@ -467,7 +495,8 @@ function renderList(){
     .map(p=>cardHTML(p,team)).join('');
 }
 
-/* ====== 俯瞰ピッチ ====== */
+/* ====== 俯瞰ピッチ（名前は苗字） ====== */
+function surname(p){ return p.name.includes(' ') ? p.name.split(' ')[0] : p.name; }
 function renderPitch(){
   document.getElementById('jpFm').textContent = JPN.formation;
   document.getElementById('tnFm').textContent = TUN.formation;
@@ -480,7 +509,7 @@ function renderPitch(){
       t.className=`tok ${team.key==="japan"?"jpn":"tun"}`;
       t.style.left=p.x+'%'; t.style.top=p.y+'%';
       t.innerHTML=`<div class="dot">${p.no}</div>
-        <div class="nm">${p.name.split(' ').pop()} <span class="rk" style="color:${o.c}">${o.l}</span></div>`;
+        <div class="nm">${surname(p)} <span class="rk" style="color:${o.c}">${o.l}</span></div>`;
       t.onclick=()=>openModal(p,team);
       pitch.appendChild(t);
     });
@@ -492,7 +521,7 @@ function benchRow(id,team){
   el.innerHTML = team.players.filter(p=>p.role==="bench").map(p=>{
     const o=rank(p.ovr);
     return `<div class="bchip ${team.key==="japan"?"jpn":"tun"} ${p.out?'out':''}" data-team="${team.key}" data-no="${p.no}">
-      <span class="bn">${p.no}</span>${p.name}
+      <span class="bn">${p.no}</span>${surname(p)}
       <span style="color:${o.c};font-weight:900;">${o.l}</span>${p.out?' 🚑':''}</div>`;
   }).join('');
   el.querySelectorAll('.bchip').forEach(c=>{
@@ -501,28 +530,102 @@ function benchRow(id,team){
   });
 }
 
+/* ====== 世界地図 ====== */
+let mapInited=false, mapObj=null;
+function buildCountryData(){
+  // country -> { japan:[players], tunisia:[players] }
+  const byC={};
+  [JPN,TUN].forEach(team=>{
+    team.players.forEach(p=>{
+      (byC[p.c] = byC[p.c] || {japan:[],tunisia:[]})[team.key].push(p);
+    });
+  });
+  return byC;
+}
+function renderCountryList(byC){
+  const el=document.getElementById('countrylist');
+  const names=Object.keys(byC).sort((a,b)=>{
+    const n=x=>byC[x].japan.length+byC[x].tunisia.length; return n(b)-n(a);
+  });
+  el.innerHTML = names.map(cn=>{
+    const f=(COUNTRY[cn]||{}).f||"";
+    const tot=byC[cn].japan.length+byC[cn].tunisia.length;
+    const chips=team=>byC[cn][team].map(p=>{
+      const o=rank(p.ovr); const dcls=p.div==="1部"?"d1":"d2";
+      return `<div class="pchip ${team==="japan"?"jpn":"tun"} ${p.out?'out':''}" data-team="${team}" data-no="${p.no}" data-role="${p.role}">
+        <span class="pn">${p.no}</span>${surname(p)}
+        <span style="opacity:.8;font-weight:700;">${p.club}<span class="divtag ${dcls}">${p.div}</span></span>
+        <span style="color:${o.c};">${o.l}</span>${p.out?' 🚑':''}</div>`;
+    }).join('');
+    const jp=byC[cn].japan.length?`<div style="margin-bottom:6px;"><span style="color:#9fc2ff;font-weight:800;font-size:12px;">🇯🇵 日本</span><div class="pchips">${chips("japan")}</div></div>`:"";
+    const tn=byC[cn].tunisia.length?`<div><span style="color:#ff9a9d;font-weight:800;font-size:12px;">🇹🇳 チュニジア</span><div class="pchips">${chips("tunisia")}</div></div>`:"";
+    return `<div class="country"><h4>${f} ${cn}<span class="cnt">${tot}人</span></h4>${jp}${tn}</div>`;
+  }).join('');
+  el.querySelectorAll('.pchip').forEach(c=>{
+    c.onclick=()=>{ const tm=TEAMS[c.dataset.team];
+      openModal(tm.players.find(x=>String(x.no)===c.dataset.no && x.role===c.dataset.role),tm); };
+  });
+}
+function renderMap(){
+  const byC=buildCountryData();
+  renderCountryList(byC);
+  if(mapInited) return;
+  mapInited=true;
+  if(typeof jsVectorMap==="undefined"){
+    document.getElementById('worldmap').innerHTML =
+      '<div style="padding:24px;text-align:center;color:#9fb6e6;">地図ライブラリを読み込めませんでした。下の国別一覧をご覧ください。</div>';
+    return;
+  }
+  const markers=[], tips=[];
+  Object.keys(byC).forEach(cn=>{
+    const co=(COUNTRY[cn]||{}).co; if(!co) return;
+    markers.push({ name:cn, coords:co });
+    const line=team=>byC[cn][team].length?
+      `<div style="margin-top:3px;"><b style="color:${team==="japan"?"#9fc2ff":"#ff9a9d"}">${team==="japan"?"🇯🇵":"🇹🇳"}</b> `+
+      byC[cn][team].map(p=>`${surname(p)}(${p.club}/${p.div})`).join('、')+`</div>`:"";
+    tips.push(`<b>${(COUNTRY[cn]||{}).f||""} ${cn}</b>${line("japan")}${line("tunisia")}`);
+  });
+  try{
+    mapObj=new jsVectorMap({
+      selector:'#worldmap', map:'world',
+      zoomButtons:true, zoomOnScroll:true, backgroundColor:'transparent',
+      regionStyle:{ initial:{ fill:'#274a86', stroke:'#0a1733', strokeWidth:0.5 }, hover:{ fill:'#3a6cff' } },
+      markers:markers,
+      markerStyle:{ initial:{ fill:'#ffd34d', stroke:'#1a1300', strokeWidth:1.2, r:7 }, hover:{ fill:'#fff', r:9 } },
+      onMarkerTooltipShow(event, tooltip, index){ tooltip.text(tips[index], true); }
+    });
+  }catch(e){
+    document.getElementById('worldmap').innerHTML =
+      '<div style="padding:24px;text-align:center;color:#9fb6e6;">地図の描画に失敗しました。下の国別一覧をご覧ください。</div>';
+  }
+}
+
 /* ====== モーダル ====== */
 const overlay=document.getElementById('overlay'), modalBody=document.getElementById('modalBody');
-function openModal(p,team){ modalBody.innerHTML=cardHTML(p,team); overlay.classList.add('show'); }
+function openModal(p,team){ if(!p) return; modalBody.innerHTML=cardHTML(p,team); overlay.classList.add('show'); }
 function closeModal(){ overlay.classList.remove('show'); }
 document.getElementById('closeBtn').onclick=closeModal;
 overlay.onclick=e=>{ if(e.target===overlay) closeModal(); };
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 
-/* ====== タブ・コントロール ====== */
+/* ====== タブ ====== */
 const listControls=document.getElementById('listControls'),
-      legendEl=document.querySelector('.legend'),
+      legendEl=document.getElementById('legend'),
       gridEl=document.getElementById('grid'),
-      pitchView=document.getElementById('pitchView');
+      pitchView=document.getElementById('pitchView'),
+      mapView=document.getElementById('mapView');
 document.querySelectorAll('#viewTabs button').forEach(b=>{
   b.onclick=()=>{
     document.querySelectorAll('#viewTabs button').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');
-    const pitch = b.dataset.view==="pitch";
-    listControls.classList.toggle('hidden',pitch);
-    gridEl.classList.toggle('hidden',pitch);
-    pitchView.classList.toggle('hidden',!pitch);
-    if(pitch) renderPitch();
+    const v=b.dataset.view;
+    listControls.classList.toggle('hidden', v!=="list");
+    legendEl.classList.toggle('hidden', v==="map");
+    gridEl.classList.toggle('hidden', v!=="list");
+    pitchView.classList.toggle('hidden', v!=="pitch");
+    mapView.classList.toggle('hidden', v!=="map");
+    if(v==="pitch") renderPitch();
+    if(v==="map") renderMap();
   };
 });
 document.querySelectorAll('#teamSeg button').forEach(b=>{
