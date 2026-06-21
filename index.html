@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本代表 vs チュニジア スタメン能力値（パワプロ風）</title>
+<style>
+  :root{
+    --bg:#0a1733;
+    --panel:#0f2350;
+    --line:#1d3a72;
+    --gold:#ffd34d;
+    --text:#eaf2ff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #16306b 0%, transparent 60%),
+      linear-gradient(180deg,#0a1733 0%,#070f24 100%);
+    color:var(--text);
+    min-height:100vh;
+  }
+  header.hero{
+    text-align:center;
+    padding:34px 16px 10px;
+  }
+  header.hero .badge{
+    display:inline-block;
+    font-size:12px;letter-spacing:.25em;
+    color:var(--gold);
+    border:1px solid var(--gold);
+    border-radius:999px;
+    padding:4px 14px;
+    margin-bottom:14px;
+  }
+  header.hero h1{
+    margin:0;
+    font-size:clamp(22px,5vw,40px);
+    font-weight:900;
+    text-shadow:0 2px 0 #000a, 0 0 18px #3a6cff66;
+  }
+  header.hero .vs{
+    display:flex;align-items:center;justify-content:center;gap:14px;
+    margin-top:14px;font-size:clamp(20px,6vw,34px);font-weight:900;
+  }
+  .flag{font-size:1.3em;filter:drop-shadow(0 2px 3px #0008);}
+  header.hero .meta{margin-top:10px;font-size:13px;color:#9fb6e6;}
+
+  .controls{
+    display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+    padding:14px 16px 4px;
+  }
+  .controls button{
+    background:var(--panel);color:var(--text);
+    border:1px solid var(--line);border-radius:999px;
+    padding:8px 16px;font-size:13px;cursor:pointer;font-weight:700;
+    transition:.15s;
+  }
+  .controls button:hover{border-color:var(--gold);}
+  .controls button.active{background:var(--gold);color:#1a1300;border-color:var(--gold);}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:18px;
+    max-width:1180px;
+    margin:18px auto 60px;
+    padding:0 16px;
+  }
+
+  .card{
+    background:linear-gradient(180deg,#13265a 0%,#0c1c44 100%);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 10px 26px #0007;
+    display:flex;flex-direction:column;
+  }
+  .card .top{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 16px;
+    background:linear-gradient(90deg,#1b3a82,#142a63);
+    border-bottom:2px solid var(--gold);
+  }
+  .num{
+    flex:0 0 auto;width:42px;height:42px;border-radius:50%;
+    background:#fff;color:#0a1733;font-weight:900;font-size:20px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:inset 0 0 0 2px #ffd34d;
+  }
+  .nmeta{flex:1;min-width:0;}
+  .nmeta .pos{
+    display:inline-block;font-size:11px;font-weight:800;
+    background:var(--gold);color:#1a1300;border-radius:4px;
+    padding:1px 7px;margin-bottom:3px;
+  }
+  .nmeta .name{font-size:19px;font-weight:900;line-height:1.15;}
+  .nmeta .name small{display:block;font-size:11px;color:#a9c0ef;font-weight:600;}
+
+  .ovr{
+    flex:0 0 auto;text-align:center;line-height:1;
+  }
+  .ovr .lbl{font-size:9px;color:#cdd9f5;letter-spacing:.1em;}
+  .ovr .rank{font-size:34px;font-weight:900;text-shadow:0 0 12px currentColor;}
+
+  .abilities{padding:10px 16px 4px;}
+  .ab{display:flex;align-items:center;gap:10px;margin:7px 0;}
+  .ab .k{flex:0 0 96px;font-size:12px;color:#c2d3f5;font-weight:700;}
+  .ab .bar{flex:1;height:10px;border-radius:6px;background:#0a1733;overflow:hidden;border:1px solid #1d3a72;}
+  .ab .bar span{display:block;height:100%;border-radius:6px;}
+  .ab .g{flex:0 0 26px;text-align:center;font-size:16px;font-weight:900;text-shadow:0 0 8px currentColor;}
+
+  .specials{padding:6px 16px 16px;display:flex;flex-wrap:wrap;gap:6px;}
+  .chip{
+    font-size:11px;font-weight:800;border-radius:5px;padding:3px 8px;
+    border:1px solid;
+  }
+  .chip.gold{color:#ffe07a;border-color:#ffd34d;background:#3a2c00;}
+  .chip.blue{color:#8fc6ff;border-color:#3a6cff;background:#0a2150;}
+
+  footer{text-align:center;padding:20px;color:#7e95c6;font-size:12px;}
+  footer a{color:var(--gold);}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="badge">KIRIN CUP SOCCER 2022 / FINAL</div>
+  <h1>スターティングメンバー能力値</h1>
+  <div class="vs">
+    <span><span class="flag">🇯🇵</span> 日本</span>
+    <span style="color:var(--gold);">VS</span>
+    <span>チュニジア <span class="flag">🇹🇳</span></span>
+  </div>
+  <div class="meta">2022.6.14 / フォーメーション 4-2-3-1 ・ パワプロ風能力査定</div>
+</header>
+
+<div class="controls" id="controls"></div>
+<div class="grid" id="grid"></div>
+
+<footer>
+  能力値・特殊能力はパワプロ風に演出したファンメイドの査定です（公式データではありません）。<br>
+  Generated for <strong>soccer_pawapuro</strong> ・ Deployed on GitHub Pages
+</footer>
+
+<script>
+/* ===== 選手データ（日本代表スタメン 4-2-3-1） ===== */
+const players = [
+  { no:1, pos:"GK", line:"GK", name:"権田 修一", en:"GONDA", ovr:79,
+    stats:{ "セービング":82, "ハイボール":74, "反応":80, "キック":68, "統率":76, "スタミナ":70 },
+    specials:[ {t:"守護神",k:"gold"}, {t:"PKストッパー",k:"gold"}, {t:"ビルドアップ△",k:"blue"} ] },
+
+  { no:19, pos:"RB", line:"DF", name:"酒井 宏樹", en:"SAKAI", ovr:80,
+    stats:{ "ディフェンス":81, "対人守備":84, "スピード":78, "フィジカル":82, "クロス":74, "スタミナ":80 },
+    specials:[ {t:"鉄壁",k:"gold"}, {t:"オーバーラップ",k:"gold"}, {t:"球際○",k:"gold"} ] },
+
+  { no:22, pos:"CB", line:"DF", name:"吉田 麻也", en:"YOSHIDA", ovr:81, captain:true,
+    stats:{ "ディフェンス":84, "対人守備":80, "スピード":62, "フィジカル":83, "ヘディング":85, "統率":86 },
+    specials:[ {t:"扇の要",k:"gold"}, {t:"司令塔",k:"gold"}, {t:"代表魂",k:"gold"}, {t:"スピード△",k:"blue"} ] },
+
+  { no:16, pos:"CB", line:"DF", name:"板倉 滉", en:"ITAKURA", ovr:80,
+    stats:{ "ディフェンス":82, "対人守備":81, "スピード":76, "フィジカル":80, "ビルドアップ":83, "ヘディング":80 },
+    specials:[ {t:"アンカー",k:"gold"}, {t:"精密パス",k:"gold"} ] },
+
+  { no:5, pos:"LB", line:"DF", name:"中山 雄太", en:"NAKAYAMA", ovr:76,
+    stats:{ "ディフェンス":77, "対人守備":76, "スピード":78, "フィジカル":75, "クロス":74, "スタミナ":82 },
+    specials:[ {t:"無尽蔵",k:"gold"}, {t:"両足",k:"gold"} ] },
+
+  { no:6, pos:"DMF", line:"MF", name:"遠藤 航", en:"ENDO", ovr:82,
+    stats:{ "ボール奪取":88, "対人守備":86, "パス":80, "フィジカル":83, "展開力":81, "スタミナ":84 },
+    specials:[ {t:"デュエル王",k:"gold"}, {t:"壁",k:"gold"}, {t:"闘志",k:"gold"} ] },
+
+  { no:13, pos:"CMF", line:"MF", name:"守田 英正", en:"MORITA", ovr:81,
+    stats:{ "パス":85, "ボール奪取":80, "展開力":84, "ドリブル":76, "視野":85, "スタミナ":83 },
+    specials:[ {t:"司令塔",k:"gold"}, {t:"バランサー",k:"gold"}, {t:"キープ力",k:"gold"} ] },
+
+  { no:14, pos:"RWG", line:"MF", name:"伊東 純也", en:"ITO", ovr:83,
+    stats:{ "スピード":92, "ドリブル":85, "クロス":84, "決定力":76, "スタミナ":85, "フィジカル":72 },
+    specials:[ {t:"韋駄天",k:"gold"}, {t:"快速ドリブラー",k:"gold"}, {t:"アシスト職人",k:"gold"} ] },
+
+  { no:15, pos:"OMF", line:"MF", name:"鎌田 大地", en:"KAMADA", ovr:82,
+    stats:{ "パス":84, "決定力":81, "ドリブル":82, "キープ":85, "視野":86, "ミドル":83 },
+    specials:[ {t:"トラップ名人",k:"gold"}, {t:"キープ力",k:"gold"}, {t:"アイディア",k:"gold"} ] },
+
+  { no:9, pos:"LWG", line:"MF", name:"三笘 薫", en:"MITOMA", ovr:85,
+    stats:{ "ドリブル":94, "スピード":88, "決定力":80, "アジリティ":92, "クロス":80, "フィジカル":72 },
+    specials:[ {t:"ドリブル神",k:"gold"}, {t:"切り込み",k:"gold"}, {t:"アジリティ◎",k:"gold"}, {t:"代表魂",k:"gold"} ] },
+
+  { no:18, pos:"CF", line:"FW", name:"上田 綺世", en:"UEDA", ovr:78,
+    stats:{ "決定力":83, "ポストプレー":78, "スピード":79, "ヘディング":82, "フィジカル":80, "オフザボール":81 },
+    specials:[ {t:"ゴールハンター",k:"gold"}, {t:"ヘッダー",k:"gold"}, {t:"パワー型",k:"gold"} ] },
+];
+
+/* ===== 数値→パワプロ風ランク ===== */
+function rank(v){
+  if(v>=90) return {l:"S",c:"#ff5a5a"};
+  if(v>=80) return {l:"A",c:"#ff8a3d"};
+  if(v>=70) return {l:"B",c:"#ffd34d"};
+  if(v>=60) return {l:"C",c:"#a6e34d"};
+  if(v>=50) return {l:"D",c:"#4dd2ff"};
+  if(v>=40) return {l:"E",c:"#6aa0ff"};
+  if(v>=20) return {l:"F",c:"#b08fff"};
+  return {l:"G",c:"#9aa6c2"};
+}
+
+const grid = document.getElementById('grid');
+function render(filter){
+  grid.innerHTML = '';
+  players
+    .filter(p => filter==='ALL' || p.line===filter)
+    .forEach(p=>{
+      const o = rank(p.ovr);
+      const ab = Object.entries(p.stats).map(([k,v])=>{
+        const r = rank(v);
+        return `<div class="ab">
+          <div class="k">${k}</div>
+          <div class="bar"><span style="width:${v}%;background:${r.c};"></span></div>
+          <div class="g" style="color:${r.c}">${r.l}</div>
+        </div>`;
+      }).join('');
+      const sp = p.specials.map(s=>`<span class="chip ${s.k}">${s.t}</span>`).join('');
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="top">
+          <div class="num">${p.no}</div>
+          <div class="nmeta">
+            <span class="pos">${p.pos}</span>
+            ${p.captain?'<span class="pos" style="background:#ff5a5a;color:#fff;">C</span>':''}
+            <div class="name">${p.name}<small>${p.en}</small></div>
+          </div>
+          <div class="ovr">
+            <div class="lbl">総合</div>
+            <div class="rank" style="color:${o.c}">${o.l}</div>
+          </div>
+        </div>
+        <div class="abilities">${ab}</div>
+        <div class="specials">${sp}</div>
+      `;
+      grid.appendChild(card);
+    });
+}
+
+const filters = [["ALL","全員"],["GK","GK"],["DF","DF"],["MF","MF"],["FW","FW"]];
+const controls = document.getElementById('controls');
+filters.forEach(([f,label],i)=>{
+  const b=document.createElement('button');
+  b.textContent=label; if(i===0)b.classList.add('active');
+  b.onclick=()=>{ [...controls.children].forEach(c=>c.classList.remove('active')); b.classList.add('active'); render(f); };
+  controls.appendChild(b);
+});
+render('ALL');
+</script>
+</body>
+</html>
