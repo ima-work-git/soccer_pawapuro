@@ -3,14 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>日本代表 vs チュニジア スタメン能力値（パワプロ風）</title>
+<title>日本 vs チュニジア 能力値（パワプロ風）｜W杯2026 グループF 第2節</title>
 <style>
   :root{
-    --bg:#0a1733;
-    --panel:#0f2350;
-    --line:#1d3a72;
-    --gold:#ffd34d;
-    --text:#eaf2ff;
+    --bg:#0a1733; --panel:#0f2350; --line:#1d3a72; --gold:#ffd34d; --text:#eaf2ff;
+    --jpn:#3a6cff; --tun:#e3343a;
   }
   *{box-sizing:border-box;}
   body{
@@ -19,180 +16,224 @@
     background:
       radial-gradient(1200px 600px at 50% -10%, #16306b 0%, transparent 60%),
       linear-gradient(180deg,#0a1733 0%,#070f24 100%);
-    color:var(--text);
-    min-height:100vh;
+    color:var(--text); min-height:100vh;
   }
-  header.hero{
-    text-align:center;
-    padding:34px 16px 10px;
-  }
+  header.hero{ text-align:center; padding:30px 16px 6px; }
   header.hero .badge{
-    display:inline-block;
-    font-size:12px;letter-spacing:.25em;
-    color:var(--gold);
-    border:1px solid var(--gold);
-    border-radius:999px;
-    padding:4px 14px;
-    margin-bottom:14px;
+    display:inline-block; font-size:12px; letter-spacing:.2em; color:var(--gold);
+    border:1px solid var(--gold); border-radius:999px; padding:4px 14px; margin-bottom:12px;
   }
-  header.hero h1{
-    margin:0;
-    font-size:clamp(22px,5vw,40px);
-    font-weight:900;
-    text-shadow:0 2px 0 #000a, 0 0 18px #3a6cff66;
-  }
-  header.hero .vs{
-    display:flex;align-items:center;justify-content:center;gap:14px;
-    margin-top:14px;font-size:clamp(20px,6vw,34px);font-weight:900;
-  }
-  .flag{font-size:1.3em;filter:drop-shadow(0 2px 3px #0008);}
-  header.hero .meta{margin-top:10px;font-size:13px;color:#9fb6e6;}
+  header.hero h1{ margin:0; font-size:clamp(20px,4.6vw,36px); font-weight:900;
+    text-shadow:0 2px 0 #000a, 0 0 18px #3a6cff66; }
+  header.hero .vs{ display:flex; align-items:center; justify-content:center; gap:14px;
+    margin-top:12px; font-size:clamp(19px,5.5vw,32px); font-weight:900; }
+  .flag{ font-size:1.3em; filter:drop-shadow(0 2px 3px #0008); }
+  header.hero .meta{ margin-top:10px; font-size:13px; color:#9fb6e6; line-height:1.6; }
+  header.hero .meta b{ color:#eaf2ff; }
 
-  .controls{
-    display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
-    padding:14px 16px 4px;
+  .tabs{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; padding:14px 16px 4px; }
+  .tabs button{
+    background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:999px;
+    padding:9px 18px; font-size:14px; cursor:pointer; font-weight:800; transition:.15s;
   }
-  .controls button{
-    background:var(--panel);color:var(--text);
-    border:1px solid var(--line);border-radius:999px;
-    padding:8px 16px;font-size:13px;cursor:pointer;font-weight:700;
-    transition:.15s;
-  }
-  .controls button:hover{border-color:var(--gold);}
-  .controls button.active{background:var(--gold);color:#1a1300;border-color:var(--gold);}
+  .tabs button:hover{ border-color:var(--gold); }
+  .tabs button.active{ background:var(--gold); color:#1a1300; border-color:var(--gold); }
 
+  .subcontrols{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; padding:8px 16px 2px; }
+  .subcontrols .seg{ display:flex; gap:6px; background:#0b1c45; border:1px solid var(--line); border-radius:999px; padding:4px; }
+  .subcontrols .seg button{
+    background:transparent; color:#bcd0f5; border:0; border-radius:999px;
+    padding:6px 14px; font-size:13px; cursor:pointer; font-weight:800;
+  }
+  .subcontrols .seg button.active{ background:var(--gold); color:#1a1300; }
+  .subcontrols .seg.jpn button.active{ background:var(--jpn); color:#fff; }
+  .subcontrols .seg.tun button.active{ background:var(--tun); color:#fff; }
+
+  .legend{ max-width:1180px; margin:6px auto 0; padding:0 16px 6px; text-align:center; font-size:12px; color:#9fb6e6; }
+  .legend span{ display:inline-block; margin:0 5px; font-weight:800; }
+
+  /* ===== カード一覧 ===== */
   .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-    gap:18px;
-    max-width:1180px;
-    margin:18px auto 60px;
-    padding:0 16px;
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:18px;
+    max-width:1180px; margin:16px auto 60px; padding:0 16px;
   }
-
   .card{
     background:linear-gradient(180deg,#13265a 0%,#0c1c44 100%);
-    border:1px solid var(--line);
-    border-radius:14px;
-    overflow:hidden;
-    box-shadow:0 10px 26px #0007;
-    display:flex;flex-direction:column;
+    border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    box-shadow:0 10px 26px #0007; display:flex; flex-direction:column;
   }
+  .card.out{ opacity:.62; }
   .card .top{
-    display:flex;align-items:center;gap:12px;
-    padding:14px 16px;
-    background:linear-gradient(90deg,#1b3a82,#142a63);
-    border-bottom:2px solid var(--gold);
+    display:flex; align-items:center; gap:12px; padding:13px 15px;
+    background:linear-gradient(90deg,#1b3a82,#142a63); border-bottom:2px solid var(--gold);
   }
+  .card.tunisia .top{ background:linear-gradient(90deg,#7a1d20,#511317); border-bottom-color:var(--tun); }
   .num{
-    flex:0 0 auto;width:42px;height:42px;border-radius:50%;
-    background:#fff;color:#0a1733;font-weight:900;font-size:20px;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:inset 0 0 0 2px #ffd34d;
+    flex:0 0 auto; width:42px; height:42px; border-radius:50%;
+    background:#fff; color:#0a1733; font-weight:900; font-size:20px;
+    display:flex; align-items:center; justify-content:center; box-shadow:inset 0 0 0 2px var(--gold);
   }
-  .nmeta{flex:1;min-width:0;}
+  .card.tunisia .num{ box-shadow:inset 0 0 0 2px var(--tun); }
+  .nmeta{ flex:1; min-width:0; }
   .nmeta .pos{
-    display:inline-block;font-size:11px;font-weight:800;
-    background:var(--gold);color:#1a1300;border-radius:4px;
-    padding:1px 7px;margin-bottom:3px;
+    display:inline-block; font-size:11px; font-weight:800; background:var(--gold); color:#1a1300;
+    border-radius:4px; padding:1px 7px; margin-bottom:3px;
   }
-  .nmeta .name{font-size:19px;font-weight:900;line-height:1.15;}
-  .nmeta .name small{display:block;font-size:11px;color:#a9c0ef;font-weight:600;}
+  .nmeta .pos.outtag{ background:#6aa0ff; color:#06122e; }
+  .nmeta .name{ font-size:19px; font-weight:900; line-height:1.15; }
+  .nmeta .name small{ display:block; font-size:11px; color:#a9c0ef; font-weight:600; margin-top:2px; }
+  .ovr{ flex:0 0 auto; text-align:center; line-height:1; }
+  .ovr .lbl{ font-size:9px; color:#cdd9f5; letter-spacing:.1em; }
+  .ovr .rank{ font-size:34px; font-weight:900; text-shadow:0 0 12px currentColor; }
+  .abilities{ padding:10px 15px 4px; }
+  .ab{ display:flex; align-items:center; gap:10px; margin:7px 0; }
+  .ab .k{ flex:0 0 92px; font-size:12px; color:#c2d3f5; font-weight:700; }
+  .ab .bar{ flex:1; height:10px; border-radius:6px; background:#0a1733; overflow:hidden; border:1px solid #1d3a72; }
+  .ab .bar span{ display:block; height:100%; border-radius:6px; }
+  .ab .g{ flex:0 0 26px; text-align:center; font-size:16px; font-weight:900; text-shadow:0 0 8px currentColor; }
+  .note{ margin:8px 15px 0; padding:8px 10px; border-radius:8px; background:#0a1c44; border:1px solid #1d3a72;
+    font-size:11.5px; color:#bcd0f5; line-height:1.5; }
+  .note b{ color:var(--gold); }
+  .specials{ padding:8px 15px 15px; display:flex; flex-wrap:wrap; gap:6px; }
+  .chip{ font-size:11px; font-weight:800; border-radius:5px; padding:3px 8px; border:1px solid; }
+  .chip.gold{ color:#ffe07a; border-color:#ffd34d; background:#3a2c00; }
+  .chip.blue{ color:#8fc6ff; border-color:#3a6cff; background:#0a2150; }
 
-  .ovr{
-    flex:0 0 auto;text-align:center;line-height:1;
+  /* ===== 俯瞰ピッチ ===== */
+  #pitchView{ max-width:1100px; margin:14px auto 50px; padding:0 12px; }
+  .pitch-head{ display:flex; justify-content:space-between; align-items:center; max-width:980px; margin:0 auto 10px; font-weight:900; }
+  .pitch-head .jp{ color:#9fc2ff; } .pitch-head .tn{ color:#ff9a9d; }
+  .pitch-head .fm{ font-size:12px; color:#9fb6e6; font-weight:700; }
+  .pitch{
+    position:relative; max-width:980px; margin:0 auto; aspect-ratio:16/10;
+    background:
+      linear-gradient(90deg,#0e7a3a 0%,#13934a 50%,#0e7a3a 100%);
+    border:3px solid #ffffffcc; border-radius:10px; overflow:hidden;
+    box-shadow:0 12px 30px #0008;
   }
-  .ovr .lbl{font-size:9px;color:#cdd9f5;letter-spacing:.1em;}
-  .ovr .rank{font-size:34px;font-weight:900;text-shadow:0 0 12px currentColor;}
-
-  .abilities{padding:10px 16px 4px;}
-  .ab{display:flex;align-items:center;gap:10px;margin:7px 0;}
-  .ab .k{flex:0 0 96px;font-size:12px;color:#c2d3f5;font-weight:700;}
-  .ab .bar{flex:1;height:10px;border-radius:6px;background:#0a1733;overflow:hidden;border:1px solid #1d3a72;}
-  .ab .bar span{display:block;height:100%;border-radius:6px;}
-  .ab .g{flex:0 0 26px;text-align:center;font-size:16px;font-weight:900;text-shadow:0 0 8px currentColor;}
-
-  .specials{padding:6px 16px 16px;display:flex;flex-wrap:wrap;gap:6px;}
-  .chip{
-    font-size:11px;font-weight:800;border-radius:5px;padding:3px 8px;
-    border:1px solid;
+  .pitch .stripe{ position:absolute; top:0; bottom:0; width:10%; background:#ffffff10; }
+  .pitch .mid{ position:absolute; left:50%; top:0; bottom:0; width:2px; background:#ffffffcc; transform:translateX(-1px); }
+  .pitch .circle{ position:absolute; left:50%; top:50%; width:18%; aspect-ratio:1; border:2px solid #ffffffcc;
+    border-radius:50%; transform:translate(-50%,-50%); }
+  .pitch .box{ position:absolute; top:50%; transform:translateY(-50%); width:13%; height:54%; border:2px solid #ffffffcc; }
+  .pitch .box.l{ left:0; border-left:0; } .pitch .box.r{ right:0; border-right:0; }
+  .tok{
+    position:absolute; transform:translate(-50%,-50%); width:60px; text-align:center; cursor:pointer;
+    z-index:2; transition:transform .12s;
   }
-  .chip.gold{color:#ffe07a;border-color:#ffd34d;background:#3a2c00;}
-  .chip.blue{color:#8fc6ff;border-color:#3a6cff;background:#0a2150;}
+  .tok:hover{ transform:translate(-50%,-50%) scale(1.12); z-index:3; }
+  .tok .dot{
+    width:38px; height:38px; margin:0 auto; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:16px; color:#fff; border:2px solid #fff; box-shadow:0 3px 8px #0007;
+  }
+  .tok.jpn .dot{ background:var(--jpn); } .tok.tun .dot{ background:var(--tun); }
+  .tok .nm{ margin-top:3px; font-size:11px; font-weight:800; color:#fff; text-shadow:0 1px 3px #000, 0 0 4px #000;
+    white-space:nowrap; }
+  .tok .rk{ font-size:10px; font-weight:900; }
 
-  footer{text-align:center;padding:20px;color:#7e95c6;font-size:12px;}
-  footer a{color:var(--gold);}
+  .benchwrap{ max-width:980px; margin:16px auto 0; }
+  .benchwrap h3{ margin:0 0 8px; font-size:13px; color:#9fb6e6; letter-spacing:.05em; }
+  .bench{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .bchip{
+    display:flex; align-items:center; gap:7px; background:#0f2350; border:1px solid var(--line);
+    border-radius:999px; padding:5px 12px 5px 6px; cursor:pointer; font-weight:800; font-size:13px; transition:.12s;
+  }
+  .bchip:hover{ border-color:var(--gold); }
+  .bchip.out{ opacity:.55; }
+  .bchip .bn{ width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:12px; color:#fff; }
+  .bchip.jpn .bn{ background:var(--jpn); } .bchip.tun .bn{ background:var(--tun); }
+
+  /* ===== モーダル ===== */
+  .overlay{ position:fixed; inset:0; background:#020817d9; display:none; align-items:center; justify-content:center;
+    padding:18px; z-index:50; }
+  .overlay.show{ display:flex; }
+  .overlay .card{ width:100%; max-width:380px; max-height:92vh; overflow:auto; }
+  .closebtn{ position:absolute; top:14px; right:16px; z-index:60; background:#13265a; color:#fff; border:1px solid var(--line);
+    width:38px; height:38px; border-radius:50%; font-size:18px; cursor:pointer; font-weight:900; }
+
+  footer{ text-align:center; padding:20px; color:#7e95c6; font-size:12px; line-height:1.7; }
+  footer a{ color:var(--gold); }
+  .hidden{ display:none !important; }
 </style>
 </head>
 <body>
 <header class="hero">
-  <div class="badge">KIRIN CUP SOCCER 2022 / FINAL</div>
-  <h1>スターティングメンバー能力値</h1>
+  <div class="badge">FIFA WORLD CUP 2026 ・ GROUP F ・ MATCHDAY 2</div>
+  <h1>スターティングメンバー＆ベンチ 能力値</h1>
   <div class="vs">
     <span><span class="flag">🇯🇵</span> 日本</span>
     <span style="color:var(--gold);">VS</span>
     <span>チュニジア <span class="flag">🇹🇳</span></span>
   </div>
-  <div class="meta">2022.6.14 / フォーメーション 4-2-3-1 ・ パワプロ風能力査定</div>
+  <div class="meta">
+    2026.6.21 / エスタディオBBVA（メキシコ・モンテレイ）/ W杯通算1000試合目<br>
+    日本 第1節はオランダと <b>2-2</b> 引き分け（先発4人変更）。<b>久保建英は左ひざ負傷で欠場</b>。<br>
+    チュニジアは初戦スウェーデンに敗れ <b>ルナール新監督</b>就任 ／ ※チュニジアは予想XI・背番号は推定
+  </div>
 </header>
 
-<div class="controls" id="controls"></div>
+<div class="tabs" id="viewTabs">
+  <button data-view="list" class="active">⚽ カード一覧</button>
+  <button data-view="pitch">🗺️ 俯瞰フォーメーション</button>
+</div>
+
+<!-- カード一覧用サブコントロール -->
+<div class="subcontrols" id="listControls">
+  <div class="seg" id="teamSeg">
+    <button data-team="japan" class="active">🇯🇵 日本</button>
+    <button data-team="tunisia">🇹🇳 チュニジア</button>
+  </div>
+  <div class="seg" id="squadSeg">
+    <button data-squad="start" class="active">先発XI</button>
+    <button data-squad="bench">控え</button>
+    <button data-squad="all">全員</button>
+  </div>
+</div>
+
+<div class="legend">
+  ランク目安：
+  <span style="color:#ff5a5a;">S</span><span style="color:#ff8a3d;">A</span><span style="color:#ffd34d;">B</span>
+  <span style="color:#a6e34d;">C</span><span style="color:#4dd2ff;">D</span><span style="color:#6aa0ff;">E</span>
+  ／ <span style="color:#ffe07a;">金特＝長所</span><span style="color:#8fc6ff;">青特＝弱点</span>
+</div>
+
 <div class="grid" id="grid"></div>
 
+<!-- 俯瞰ピッチ -->
+<div id="pitchView" class="hidden">
+  <div class="pitch-head">
+    <div><span class="jp">🇯🇵 日本</span> <span class="fm" id="jpFm"></span></div>
+    <div style="text-align:right;"><span class="tn">チュニジア 🇹🇳</span> <span class="fm" id="tnFm"></span></div>
+  </div>
+  <div class="pitch" id="pitch">
+    <div class="stripe" style="left:0;"></div><div class="stripe" style="left:20%;"></div>
+    <div class="stripe" style="left:40%;"></div><div class="stripe" style="left:60%;"></div>
+    <div class="stripe" style="left:80%;"></div>
+    <div class="mid"></div><div class="circle"></div>
+    <div class="box l"></div><div class="box r"></div>
+  </div>
+  <div class="benchwrap">
+    <h3>🇯🇵 日本 ベンチ（クリックで詳細）</h3>
+    <div class="bench" id="jpBench"></div>
+    <h3>🇹🇳 チュニジア ベンチ（クリックで詳細・推定）</h3>
+    <div class="bench" id="tnBench"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <button class="closebtn" id="closeBtn">×</button>
+  <div id="modalBody"></div>
+</div>
+
 <footer>
-  能力値・特殊能力はパワプロ風に演出したファンメイドの査定です（公式データではありません）。<br>
+  日本の確定スタメン・背番号・所属は2026年6月21日時点の公開情報に基づきます。チュニジアは試合前の予想XI（背番号は推定）。<br>
+  能力値・特殊能力は各選手の実績を踏まえたファンメイド査定で、公式データではありません。<br>
   Generated for <strong>soccer_pawapuro</strong> ・ Deployed on GitHub Pages
 </footer>
 
 <script>
-/* ===== 選手データ（日本代表スタメン 4-2-3-1） ===== */
-const players = [
-  { no:1, pos:"GK", line:"GK", name:"権田 修一", en:"GONDA", ovr:79,
-    stats:{ "セービング":82, "ハイボール":74, "反応":80, "キック":68, "統率":76, "スタミナ":70 },
-    specials:[ {t:"守護神",k:"gold"}, {t:"PKストッパー",k:"gold"}, {t:"ビルドアップ△",k:"blue"} ] },
-
-  { no:19, pos:"RB", line:"DF", name:"酒井 宏樹", en:"SAKAI", ovr:80,
-    stats:{ "ディフェンス":81, "対人守備":84, "スピード":78, "フィジカル":82, "クロス":74, "スタミナ":80 },
-    specials:[ {t:"鉄壁",k:"gold"}, {t:"オーバーラップ",k:"gold"}, {t:"球際○",k:"gold"} ] },
-
-  { no:22, pos:"CB", line:"DF", name:"吉田 麻也", en:"YOSHIDA", ovr:81, captain:true,
-    stats:{ "ディフェンス":84, "対人守備":80, "スピード":62, "フィジカル":83, "ヘディング":85, "統率":86 },
-    specials:[ {t:"扇の要",k:"gold"}, {t:"司令塔",k:"gold"}, {t:"代表魂",k:"gold"}, {t:"スピード△",k:"blue"} ] },
-
-  { no:16, pos:"CB", line:"DF", name:"板倉 滉", en:"ITAKURA", ovr:80,
-    stats:{ "ディフェンス":82, "対人守備":81, "スピード":76, "フィジカル":80, "ビルドアップ":83, "ヘディング":80 },
-    specials:[ {t:"アンカー",k:"gold"}, {t:"精密パス",k:"gold"} ] },
-
-  { no:5, pos:"LB", line:"DF", name:"中山 雄太", en:"NAKAYAMA", ovr:76,
-    stats:{ "ディフェンス":77, "対人守備":76, "スピード":78, "フィジカル":75, "クロス":74, "スタミナ":82 },
-    specials:[ {t:"無尽蔵",k:"gold"}, {t:"両足",k:"gold"} ] },
-
-  { no:6, pos:"DMF", line:"MF", name:"遠藤 航", en:"ENDO", ovr:82,
-    stats:{ "ボール奪取":88, "対人守備":86, "パス":80, "フィジカル":83, "展開力":81, "スタミナ":84 },
-    specials:[ {t:"デュエル王",k:"gold"}, {t:"壁",k:"gold"}, {t:"闘志",k:"gold"} ] },
-
-  { no:13, pos:"CMF", line:"MF", name:"守田 英正", en:"MORITA", ovr:81,
-    stats:{ "パス":85, "ボール奪取":80, "展開力":84, "ドリブル":76, "視野":85, "スタミナ":83 },
-    specials:[ {t:"司令塔",k:"gold"}, {t:"バランサー",k:"gold"}, {t:"キープ力",k:"gold"} ] },
-
-  { no:14, pos:"RWG", line:"MF", name:"伊東 純也", en:"ITO", ovr:83,
-    stats:{ "スピード":92, "ドリブル":85, "クロス":84, "決定力":76, "スタミナ":85, "フィジカル":72 },
-    specials:[ {t:"韋駄天",k:"gold"}, {t:"快速ドリブラー",k:"gold"}, {t:"アシスト職人",k:"gold"} ] },
-
-  { no:15, pos:"OMF", line:"MF", name:"鎌田 大地", en:"KAMADA", ovr:82,
-    stats:{ "パス":84, "決定力":81, "ドリブル":82, "キープ":85, "視野":86, "ミドル":83 },
-    specials:[ {t:"トラップ名人",k:"gold"}, {t:"キープ力",k:"gold"}, {t:"アイディア",k:"gold"} ] },
-
-  { no:9, pos:"LWG", line:"MF", name:"三笘 薫", en:"MITOMA", ovr:85,
-    stats:{ "ドリブル":94, "スピード":88, "決定力":80, "アジリティ":92, "クロス":80, "フィジカル":72 },
-    specials:[ {t:"ドリブル神",k:"gold"}, {t:"切り込み",k:"gold"}, {t:"アジリティ◎",k:"gold"}, {t:"代表魂",k:"gold"} ] },
-
-  { no:18, pos:"CF", line:"FW", name:"上田 綺世", en:"UEDA", ovr:78,
-    stats:{ "決定力":83, "ポストプレー":78, "スピード":79, "ヘディング":82, "フィジカル":80, "オフザボール":81 },
-    specials:[ {t:"ゴールハンター",k:"gold"}, {t:"ヘッダー",k:"gold"}, {t:"パワー型",k:"gold"} ] },
-];
-
-/* ===== 数値→パワプロ風ランク ===== */
+/* ====== ランク変換 ====== */
 function rank(v){
   if(v>=90) return {l:"S",c:"#ff5a5a"};
   if(v>=80) return {l:"A",c:"#ff8a3d"};
@@ -204,53 +245,296 @@ function rank(v){
   return {l:"G",c:"#9aa6c2"};
 }
 
-const grid = document.getElementById('grid');
-function render(filter){
-  grid.innerHTML = '';
-  players
-    .filter(p => filter==='ALL' || p.line===filter)
-    .forEach(p=>{
-      const o = rank(p.ovr);
-      const ab = Object.entries(p.stats).map(([k,v])=>{
-        const r = rank(v);
-        return `<div class="ab">
-          <div class="k">${k}</div>
-          <div class="bar"><span style="width:${v}%;background:${r.c};"></span></div>
-          <div class="g" style="color:${r.c}">${r.l}</div>
-        </div>`;
-      }).join('');
-      const sp = p.specials.map(s=>`<span class="chip ${s.k}">${s.t}</span>`).join('');
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <div class="top">
-          <div class="num">${p.no}</div>
-          <div class="nmeta">
-            <span class="pos">${p.pos}</span>
-            ${p.captain?'<span class="pos" style="background:#ff5a5a;color:#fff;">C</span>':''}
-            <div class="name">${p.name}<small>${p.en}</small></div>
-          </div>
-          <div class="ovr">
-            <div class="lbl">総合</div>
-            <div class="rank" style="color:${o.c}">${o.l}</div>
-          </div>
-        </div>
-        <div class="abilities">${ab}</div>
-        <div class="specials">${sp}</div>
-      `;
-      grid.appendChild(card);
-    });
+/* ====== データ ====== x,y はピッチ上の絶対座標(%) 先発のみ ====== */
+const JPN = { key:"japan", cls:"", name:"日本", flag:"🇯🇵", formation:"3-4-2-1", players:[
+  // --- 先発XI ---
+  { no:1, pos:"GK", name:"鈴木 彩艶", en:"Z.SUZUKI", club:"パルマ（伊）", ovr:81, role:"start", x:5, y:50,
+    stats:{ "セービング":84,"反応":86,"ハイボール":78,"キック":83,"統率":74,"スタミナ":72 },
+    note:"190cmの体格と長いリーチを持つ守護神。セリエAで主力を張り森保Jの正GKに定着。",
+    specials:[{t:"守護神",k:"gold"},{t:"高身長",k:"gold"},{t:"足元◎",k:"gold"}] },
+  { no:22, pos:"CB", name:"冨安 健洋", en:"TOMIYASU", club:"アヤックス（蘭）", ovr:84, role:"start", x:15, y:26,
+    stats:{ "ディフェンス":86,"対人守備":87,"スピード":78,"フィジカル":82,"ヘディング":80,"ビルドアップ":80 },
+    note:"両サイドとCBをこなすユーティリティ。プレミアで磨いた対人守備は世界級。難点は故障の多さ。",
+    specials:[{t:"鉄壁",k:"gold"},{t:"ユーティリティ",k:"gold"},{t:"対人◎",k:"gold"},{t:"故障持ち",k:"blue"}] },
+  { no:4, pos:"CB", name:"板倉 滉", en:"ITAKURA", club:"アヤックス（蘭）", ovr:82, role:"start", x:15, y:50, captain:true,
+    stats:{ "ディフェンス":83,"対人守備":82,"スピード":77,"フィジカル":81,"ビルドアップ":84,"統率":85 },
+    note:"精密なロングフィードと統率力を備える主将。最終ラインの司令塔として中央を締める。",
+    specials:[{t:"扇の要",k:"gold"},{t:"精密フィード",k:"gold"},{t:"キャプテンシー",k:"gold"}] },
+  { no:21, pos:"CB", name:"伊藤 洋輝", en:"H.ITO", club:"バイエルン（独）", ovr:81, role:"start", x:15, y:74,
+    stats:{ "ディフェンス":81,"対人守備":79,"スピード":73,"フィジカル":80,"ビルドアップ":86,"ヘディング":81 },
+    note:"左利きの長身CB。バイエルン所属、精度抜群の左足から組み立てを牽引。長期離脱の過去も。",
+    specials:[{t:"左足の名手",k:"gold"},{t:"精密パス",k:"gold"},{t:"高さ",k:"gold"},{t:"故障持ち",k:"blue"}] },
+  { no:14, pos:"RWB", name:"伊東 純也", en:"J.ITO", club:"ヘンク（白）", ovr:85, role:"start", x:27, y:9,
+    stats:{ "スピード":93,"ドリブル":86,"クロス":87,"決定力":75,"スタミナ":86,"フィジカル":72 },
+    note:"日本最速級のスプリントと高速クロスを誇る右の生命線。代表アシスト量産の韋駄天WG。",
+    specials:[{t:"韋駄天",k:"gold"},{t:"高速クロス",k:"gold"},{t:"アシスト職人",k:"gold"}] },
+  { no:7, pos:"CH", name:"田中 碧", en:"A.TANAKA", club:"リーズ（英）", ovr:82, role:"start", x:28, y:39,
+    stats:{ "パス":84,"ボール奪取":80,"展開力":83,"ドリブル":78,"視野":84,"スタミナ":85 },
+    note:"カタールW杯スペイン戦で決勝点を演出した勝負強さ。リーズで昇格を経験したボックス型MF。",
+    specials:[{t:"ゲームメイク",k:"gold"},{t:"勝負強さ",k:"gold"},{t:"広い視野",k:"gold"}] },
+  { no:24, pos:"CH", name:"佐野 海舟", en:"K.SANO", club:"マインツ（独）", ovr:82, role:"start", x:28, y:61,
+    stats:{ "ボール奪取":88,"対人守備":84,"フィジカル":82,"スタミナ":88,"パス":78,"展開力":78 },
+    note:"無尽蔵のスタミナと球際の強さでブンデスでも評価急騰。中盤を制圧するボールハンター。",
+    specials:[{t:"デュエル王",k:"gold"},{t:"無尽蔵",k:"gold"},{t:"球際◎",k:"gold"}] },
+  { no:13, pos:"LWB", name:"中村 敬斗", en:"K.NAKAMURA", club:"ランス（仏）", ovr:82, role:"start", x:27, y:91,
+    stats:{ "ドリブル":84,"スピード":85,"決定力":82,"クロス":78,"フィジカル":70,"スタミナ":80 },
+    note:"リーグ・アンで二桁得点を狙う左の仕掛け役。鋭い左足ドリブルと一発の決定力が武器。",
+    specials:[{t:"切れ味ドリブル",k:"gold"},{t:"左足一閃",k:"gold"},{t:"一発",k:"gold"}] },
+  { no:10, pos:"OMF", name:"堂安 律", en:"DOAN", club:"フランクフルト（独）", ovr:84, role:"start", x:38, y:34,
+    stats:{ "決定力":83,"ドリブル":82,"パス":81,"ミドル":85,"勝負強さ":88,"スタミナ":82 },
+    note:"カタールW杯でドイツ・スペイン両戦にゴール。大舞台で輝く背番号10のクラッチシューター。",
+    specials:[{t:"大舞台◎",k:"gold"},{t:"ミドルシュート",k:"gold"},{t:"勝負師",k:"gold"}] },
+  { no:15, pos:"OMF", name:"鎌田 大地", en:"KAMADA", club:"クリスタル・パレス（英）", ovr:83, role:"start", x:38, y:66,
+    stats:{ "パス":85,"決定力":81,"ドリブル":81,"キープ":85,"視野":86,"ミドル":83 },
+    note:"EL制覇の実績を持つ技巧派。柔らかいトラップとアイディアで前線にリズムを生むシャドー。",
+    specials:[{t:"トラップ名人",k:"gold"},{t:"アイディア",k:"gold"},{t:"キープ力",k:"gold"}] },
+  { no:18, pos:"CF", name:"上田 綺世", en:"UEDA", club:"フェイエノールト（蘭）", ovr:83, role:"start", x:45, y:50,
+    stats:{ "決定力":85,"ポストプレー":80,"スピード":79,"ヘディング":83,"フィジカル":80,"オフザボール":84 },
+    note:"エールディビジで得点を量産する点取り屋。鋭い抜け出しと決定力でゴールを陥れるCF。",
+    specials:[{t:"ゴールハンター",k:"gold"},{t:"ヘディング◎",k:"gold"},{t:"抜け出し",k:"gold"}] },
+  // --- 控え ---
+  { no:8, pos:"OMF", name:"久保 建英", en:"KUBO", club:"R.ソシエダ（西）", ovr:86, role:"bench", out:true,
+    stats:{ "ドリブル":88,"パス":84,"決定力":81,"スピード":82,"視野":86,"フィジカル":70 },
+    note:"左ひざ負傷で本戦は欠場。本来はラ・リーガで違いを生む日本の至宝。右足の精度と仕掛けは別格。",
+    specials:[{t:"天才ドリブラー",k:"gold"},{t:"司令塔",k:"gold"},{t:"右足の名手",k:"gold"},{t:"負傷欠場",k:"blue"}] },
+  { no:6, pos:"DMF", name:"遠藤 航", en:"ENDO", club:"リバプール（英）", ovr:84, role:"bench",
+    stats:{ "ボール奪取":87,"対人守備":86,"パス":81,"フィジカル":83,"展開力":81,"スタミナ":84 },
+    note:"リバプールでリーグ制覇を経験したアンカー。デュエルの鬼にして精神的支柱。",
+    specials:[{t:"デュエル王",k:"gold"},{t:"壁",k:"gold"},{t:"闘志",k:"gold"}] },
+  { no:11, pos:"FW", name:"前田 大然", en:"D.MAEDA", club:"セルティック（蘇）", ovr:81, role:"bench",
+    stats:{ "スピード":92,"スタミナ":88,"ドリブル":78,"決定力":76,"プレッシング":90,"フィジカル":74 },
+    note:"セルティックでタイトル量産。圧倒的なスプリントと前線守備でスイッチを入れる韋駄天FW。",
+    specials:[{t:"韋駄天",k:"gold"},{t:"鬼プレス",k:"gold"},{t:"無尽蔵",k:"gold"}] },
+  { no:2, pos:"RB", name:"菅原 由勢", en:"SUGAWARA", club:"サウサンプトン（英）", ovr:79, role:"bench",
+    stats:{ "ディフェンス":76,"対人守備":75,"スピード":80,"クロス":80,"スタミナ":84,"フィジカル":72 },
+    note:"攻撃的右SB。果敢なオーバーラップと精度あるクロスでサイドに推進力を加える。",
+    specials:[{t:"オーバーラップ",k:"gold"},{t:"スタミナ",k:"gold"}] },
+  { no:16, pos:"CB", name:"渡辺 剛", en:"T.WATANABE", club:"フェイエノールト（蘭）", ovr:80, role:"bench",
+    stats:{ "ディフェンス":81,"対人守備":81,"スピード":76,"フィジカル":81,"ビルドアップ":78,"ヘディング":80 },
+    note:"オランダ戦に先発した対人に強いCB。高さと球際で最終ラインを支える。",
+    specials:[{t:"対人○",k:"gold"},{t:"高さ",k:"gold"}] },
+  { no:3, pos:"CB", name:"谷口 彰悟", en:"TANIGUCHI", club:"アル・ラーヤン（カタール）", ovr:79, role:"bench",
+    stats:{ "ディフェンス":81,"対人守備":80,"スピード":68,"フィジカル":80,"ヘディング":82,"統率":82 },
+    note:"経験豊富な統率型CB。空中戦の強さと読みでラインを落ち着かせるベテラン。",
+    specials:[{t:"統率",k:"gold"},{t:"ヘディング○",k:"gold"},{t:"経験",k:"gold"}] },
+  { no:5, pos:"LB", name:"長友 佑都", en:"NAGATOMO", club:"FC東京", ovr:74, role:"bench",
+    stats:{ "スピード":72,"スタミナ":82,"対人守備":75,"フィジカル":74,"クロス":72,"経験":99 },
+    note:"5大会連続W杯のレジェンド。衰えぬ走力と不屈の闘志でチームを鼓舞するムードメーカー。",
+    specials:[{t:"レジェンド",k:"gold"},{t:"ムードメーカー",k:"gold"},{t:"不屈",k:"gold"},{t:"年齢",k:"blue"}] },
+  { no:20, pos:"CB", name:"瀬古 歩夢", en:"SEKO", club:"ル・アーヴル（仏）", ovr:77, role:"bench",
+    stats:{ "ディフェンス":78,"対人守備":77,"スピード":75,"フィジカル":76,"ビルドアップ":79,"ヘディング":76 },
+    note:"リーグ・アンで研鑽を積む若手CB。落ち着いた対応とビルドアップ参加が持ち味。",
+    specials:[{t:"冷静",k:"gold"},{t:"ビルドアップ",k:"gold"}] },
+  { no:25, pos:"DF", name:"鈴木 淳之介", en:"J.SUZUKI", club:"コペンハーゲン（丁）", ovr:76, role:"bench",
+    stats:{ "ディフェンス":75,"対人守備":74,"スピード":80,"フィジカル":72,"クロス":74,"スタミナ":82 },
+    note:"左サイドをこなす伸び盛りの若手。スピードと運動量でアップダウンを繰り返す。",
+    specials:[{t:"快足",k:"gold"},{t:"将来性",k:"gold"}] },
+  { no:17, pos:"MF", name:"鈴木 唯人", en:"Y.SUZUKI", club:"ブレンビー（丁）", ovr:79, role:"bench",
+    stats:{ "ドリブル":82,"パス":80,"決定力":79,"視野":81,"スピード":80,"フィジカル":70 },
+    note:"創造性豊かなアタッカー。ひらめきのあるドリブルとラストパスで違いを作る。",
+    specials:[{t:"技巧派",k:"gold"},{t:"ひらめき",k:"gold"}] },
+  { no:19, pos:"FW", name:"小川 航基", en:"K.OGAWA", club:"NEC（蘭）", ovr:80, role:"bench",
+    stats:{ "決定力":82,"ヘディング":83,"ポストプレー":80,"フィジカル":81,"スピード":75,"オフザボール":80 },
+    note:"エールディビジで点を取る大型FW。高さとポストプレーで起点になれるゴールハンター。",
+    specials:[{t:"ヘディング○",k:"gold"},{t:"ゴールハンター",k:"gold"},{t:"高さ",k:"gold"}] },
+  { no:9, pos:"FW", name:"後藤 啓介", en:"GOTO", club:"シント＝トロイデン（白）", ovr:76, role:"bench",
+    stats:{ "決定力":78,"ヘディング":80,"ポストプレー":78,"スピード":76,"フィジカル":80,"オフザボール":76 },
+    note:"代表最年少クラスの大型FW。高さと体の強さを備える次世代のストライカー。",
+    specials:[{t:"大型FW",k:"gold"},{t:"将来性",k:"gold"}] },
+  { no:12, pos:"GK", name:"大迫 敬介", en:"OSAKO", club:"サンフレッチェ広島", ovr:76, role:"bench",
+    stats:{ "セービング":78,"反応":79,"ハイボール":76,"キック":75,"統率":74,"スタミナ":70 },
+    note:"Jリーグ屈指の安定感を誇る第2GK。反応の速さとハイボール処理に定評。",
+    specials:[{t:"安定感",k:"gold"}] },
+  { no:23, pos:"GK", name:"早川 友基", en:"HAYAKAWA", club:"鹿島アントラーズ", ovr:75, role:"bench",
+    stats:{ "セービング":77,"反応":78,"ハイボール":74,"キック":76,"統率":72,"スタミナ":70 },
+    note:"Jリーグで台頭した若手GK。足元の技術とシュートストップに伸びしろ。",
+    specials:[{t:"将来性",k:"gold"}] },
+]};
+
+const TUN = { key:"tunisia", cls:"tunisia", name:"チュニジア", flag:"🇹🇳", formation:"4-2-3-1", players:[
+  // --- 予想先発XI（背番号は推定） ---
+  { no:16, pos:"GK", name:"ダフメン", en:"DAHMEN", club:"シヴァススポル（土）", ovr:76, role:"start", x:95, y:50,
+    stats:{ "セービング":78,"反応":78,"ハイボール":76,"キック":72,"統率":74,"スタミナ":70 },
+    note:"チュニジアの正GK候補。反応とシュートストップで最後の砦を担う。",
+    specials:[{t:"守護神",k:"gold"}] },
+  { no:2, pos:"RB", name:"ヴァレリー", en:"VALERY", club:"アンジェ（仏）", ovr:77, role:"start", x:85, y:16,
+    stats:{ "ディフェンス":76,"対人守備":76,"スピード":80,"クロス":75,"フィジカル":78,"スタミナ":80 },
+    note:"フランス育ちの右SB。フィジカルと上下動でサイドをカバーする。",
+    specials:[{t:"運動量",k:"gold"}] },
+  { no:3, pos:"CB", name:"レキク", en:"REKIK", club:"セビージャAt.（西）", ovr:78, role:"start", x:85, y:39,
+    stats:{ "ディフェンス":78,"対人守備":79,"スピード":78,"フィジカル":80,"ヘディング":78,"ビルドアップ":74 },
+    note:"スピードと対人に強い若手CB。欧州の育成を経た守備の柱候補。",
+    specials:[{t:"対人○",k:"gold"},{t:"快速CB",k:"gold"}] },
+  { no:4, pos:"CB", name:"タルビ", en:"TALBI", club:"ロリアン（仏）", ovr:79, role:"start", x:85, y:61,
+    stats:{ "ディフェンス":80,"対人守備":80,"スピード":76,"フィジカル":82,"ヘディング":82,"ビルドアップ":72 },
+    note:"高さと強さを備える主力CB。空中戦とセットプレーでも存在感を放つ。",
+    specials:[{t:"高さ",k:"gold"},{t:"対人○",k:"gold"}] },
+  { no:5, pos:"LB", name:"アブディ", en:"ABDI", club:"ニース（仏）", ovr:77, role:"start", x:85, y:84,
+    stats:{ "ディフェンス":76,"対人守備":75,"スピード":79,"クロス":78,"フィジカル":74,"スタミナ":82 },
+    note:"攻守に走れる左SB。クロスとアップダウンで左サイドに推進力を加える。",
+    specials:[{t:"運動量",k:"gold"}] },
+  { no:13, pos:"DMF", name:"ケディラ", en:"KHEDIRA", club:"U.ベルリン（独）", ovr:80, role:"start", x:73, y:40,
+    stats:{ "ボール奪取":82,"対人守備":82,"パス":78,"フィジカル":82,"展開力":76,"スタミナ":82 },
+    note:"ブンデスで主力を張る守備的MF。読みと球際でバイタルを封鎖するアンカー。",
+    specials:[{t:"守備職人",k:"gold"},{t:"球際",k:"gold"}] },
+  { no:15, pos:"DMF", name:"スキリ", en:"SKHIRI", club:"フランクフルト（独）", ovr:82, role:"start", x:73, y:60,
+    stats:{ "パス":82,"ボール奪取":83,"展開力":81,"フィジカル":81,"視野":81,"スタミナ":84 },
+    note:"フランクフルトの心臓。攻守に効く万能型でボックス・トゥ・ボックスに動けるエンジン。",
+    specials:[{t:"万能MF",k:"gold"},{t:"無尽蔵",k:"gold"},{t:"展開力",k:"gold"}] },
+  { no:7, pos:"RWG", name:"アシュリ", en:"ACHOURI", club:"コペンハーゲン（丁）", ovr:80, role:"start", x:63, y:20,
+    stats:{ "ドリブル":82,"スピード":83,"決定力":78,"クロス":78,"スタミナ":82,"フィジカル":70 },
+    note:"推進力に優れる右の仕掛け役。縦への突破とゴール関与でチャンスを作る。",
+    specials:[{t:"推進力",k:"gold"},{t:"快速",k:"gold"}] },
+  { no:10, pos:"OMF", name:"メイブリ", en:"MEJBRI", club:"バーンリー（英）", ovr:81, role:"start", x:63, y:50,
+    stats:{ "ドリブル":83,"パス":82,"決定力":76,"視野":83,"キープ":81,"フィジカル":74 },
+    note:"創造性と闘志を併せ持つ司令塔。テクニックとラストパスで攻撃を組み立てる。",
+    specials:[{t:"司令塔",k:"gold"},{t:"テクニシャン",k:"gold"},{t:"闘志",k:"gold"}] },
+  { no:14, pos:"LWG", name:"ガルビ", en:"GHARBI", club:"アウクスブルク（独）", ovr:79, role:"start", x:63, y:80,
+    stats:{ "ドリブル":82,"パス":80,"決定力":76,"スピード":80,"視野":80,"フィジカル":68 },
+    note:"足元に優れる技巧派ウインガー。左足の細かいタッチで局面を打開する。",
+    specials:[{t:"技巧派",k:"gold"},{t:"左足",k:"gold"}] },
+  { no:11, pos:"CF", name:"サード", en:"SAAD", club:"ザンクト・パウリ（独）", ovr:79, role:"start", x:55, y:50,
+    stats:{ "ドリブル":82,"決定力":80,"スピード":82,"フィジカル":74,"オフザボール":78,"スタミナ":80 },
+    note:"ドイツ育ちの仕掛けるアタッカー。スピードとドリブルで最前線から脅威を作る。",
+    specials:[{t:"ドリブラー",k:"gold"},{t:"快速",k:"gold"}] },
+  // --- 控え（主な招集メンバー・推定） ---
+  { no:9, pos:"FW", name:"ジャジリ", en:"JAZIRI", club:"ザマレク（埃）", ovr:78, role:"bench",
+    stats:{ "決定力":80,"ヘディング":78,"ポストプレー":77,"スピード":78,"フィジカル":78,"オフザボール":79 },
+    note:"得点感覚に優れるストライカー。北アフリカの強豪で実績を積んだ点取り屋。",
+    specials:[{t:"ゴールハンター",k:"gold"}] },
+  { no:8, pos:"DMF", name:"ライドゥニ", en:"LAIDOUNI", club:"レンヌ（仏）", ovr:80, role:"bench",
+    stats:{ "ボール奪取":83,"対人守備":82,"フィジカル":83,"パス":77,"展開力":76,"スタミナ":83 },
+    note:"フィジカルと球際の強さが武器の守備的MF。中盤で潰し役を担うファイター。",
+    specials:[{t:"デュエル",k:"gold"},{t:"球際◎",k:"gold"}] },
+  { no:12, pos:"LB", name:"マアルール", en:"MAALOUL", club:"アル・アハリ（埃）", ovr:78, role:"bench",
+    stats:{ "ディフェンス":76,"クロス":80,"スピード":74,"フィジカル":74,"スタミナ":80,"経験":90 },
+    note:"百戦錬磨のベテラン左SB。左足のキックとセットプレーの精度が光る。",
+    specials:[{t:"左足の名手",k:"gold"},{t:"経験",k:"gold"}] },
+  { no:6, pos:"CB", name:"メリア", en:"MERIAH", club:"エスペランス（チュニジア）", ovr:77, role:"bench",
+    stats:{ "ディフェンス":79,"対人守備":79,"スピード":70,"フィジカル":80,"ヘディング":81,"統率":80 },
+    note:"国内屈指の経験を持つCB。高さと統率で最終ラインを締めるリーダー。",
+    specials:[{t:"統率",k:"gold"},{t:"高さ",k:"gold"}] },
+  { no:20, pos:"MF", name:"スリマン", en:"SLIMANE", club:"ノリッジ（英）", ovr:78, role:"bench",
+    stats:{ "パス":79,"ドリブル":78,"決定力":76,"フィジカル":78,"視野":79,"スタミナ":80 },
+    note:"長身でテクニックも備える万能MF。中盤に高さと推進力を加えられる。",
+    specials:[{t:"万能",k:"gold"}] },
+  { no:17, pos:"AMF", name:"ムサクニ", en:"MSAKNI", club:"アル・アラビ（カタール）", ovr:78, role:"bench",
+    stats:{ "ドリブル":80,"パス":81,"決定力":79,"視野":82,"キープ":80,"フィジカル":66 },
+    note:"チュニジアの象徴的アタッカー。経験と技術で流れを変えられるベテランの司令塔。",
+    specials:[{t:"レジェンド",k:"gold"},{t:"テクニシャン",k:"gold"},{t:"年齢",k:"blue"}] },
+  { no:1, pos:"GK", name:"ベン・サイド", en:"BEN SAID", club:"USモナスティル（チュニジア）", ovr:74, role:"bench",
+    stats:{ "セービング":76,"反応":76,"ハイボール":74,"キック":71,"統率":73,"スタミナ":70 },
+    note:"国内リーグで実績を積む控えGK。安定したハンドリングが持ち味。",
+    specials:[{t:"安定感",k:"gold"}] },
+]};
+
+const TEAMS = { japan:JPN, tunisia:TUN };
+
+/* ====== カードHTML生成 ====== */
+function cardHTML(p, team){
+  const o = rank(p.ovr);
+  const ab = Object.entries(p.stats).map(([k,v])=>{
+    const r = rank(v);
+    return `<div class="ab"><div class="k">${k}</div>
+      <div class="bar"><span style="width:${Math.min(v,100)}%;background:${r.c};"></span></div>
+      <div class="g" style="color:${r.c}">${r.l}</div></div>`;
+  }).join('');
+  const sp = p.specials.map(s=>`<span class="chip ${s.k}">${s.t}</span>`).join('');
+  return `<div class="card ${team.cls} ${p.out?'out':''}">
+    <div class="top">
+      <div class="num">${p.no}</div>
+      <div class="nmeta">
+        <span class="pos">${p.pos}</span>
+        ${p.captain?'<span class="pos" style="background:#ff5a5a;color:#fff;">C</span>':''}
+        ${p.out?'<span class="pos outtag">負傷欠場</span>':''}
+        <div class="name">${p.name}<small>${p.en} ・ ${p.club}</small></div>
+      </div>
+      <div class="ovr"><div class="lbl">総合</div><div class="rank" style="color:${o.c}">${o.l}</div></div>
+    </div>
+    <div class="abilities">${ab}</div>
+    <div class="note">📈 <b>実績</b>：${p.note}</div>
+    <div class="specials">${sp}</div>
+  </div>`;
 }
 
-const filters = [["ALL","全員"],["GK","GK"],["DF","DF"],["MF","MF"],["FW","FW"]];
-const controls = document.getElementById('controls');
-filters.forEach(([f,label],i)=>{
-  const b=document.createElement('button');
-  b.textContent=label; if(i===0)b.classList.add('active');
-  b.onclick=()=>{ [...controls.children].forEach(c=>c.classList.remove('active')); b.classList.add('active'); render(f); };
-  controls.appendChild(b);
+/* ====== カード一覧 ====== */
+let curTeam="japan", curSquad="start";
+const grid=document.getElementById('grid');
+function renderList(){
+  const team=TEAMS[curTeam];
+  grid.innerHTML = team.players
+    .filter(p=> curSquad==="all" || (curSquad==="start"?p.role==="start":p.role==="bench"))
+    .map(p=>cardHTML(p,team)).join('');
+}
+
+/* ====== 俯瞰ピッチ ====== */
+function renderPitch(){
+  document.getElementById('jpFm').textContent = JPN.formation;
+  document.getElementById('tnFm').textContent = TUN.formation;
+  const pitch=document.getElementById('pitch');
+  pitch.querySelectorAll('.tok').forEach(e=>e.remove());
+  [JPN,TUN].forEach(team=>{
+    team.players.filter(p=>p.role==="start").forEach(p=>{
+      const o=rank(p.ovr);
+      const t=document.createElement('div');
+      t.className=`tok ${team.key==="japan"?"jpn":"tun"}`;
+      t.style.left=p.x+'%'; t.style.top=p.y+'%';
+      t.innerHTML=`<div class="dot">${p.no}</div>
+        <div class="nm">${p.name.split(' ').pop()} <span class="rk" style="color:${o.c}">${o.l}</span></div>`;
+      t.onclick=()=>openModal(p,team);
+      pitch.appendChild(t);
+    });
+  });
+  benchRow('jpBench',JPN); benchRow('tnBench',TUN);
+}
+function benchRow(id,team){
+  const el=document.getElementById(id);
+  el.innerHTML = team.players.filter(p=>p.role==="bench").map(p=>{
+    const o=rank(p.ovr);
+    return `<div class="bchip ${team.key==="japan"?"jpn":"tun"} ${p.out?'out':''}" data-team="${team.key}" data-no="${p.no}">
+      <span class="bn">${p.no}</span>${p.name}
+      <span style="color:${o.c};font-weight:900;">${o.l}</span>${p.out?' 🚑':''}</div>`;
+  }).join('');
+  el.querySelectorAll('.bchip').forEach(c=>{
+    c.onclick=()=>{ const tm=TEAMS[c.dataset.team];
+      openModal(tm.players.find(x=>String(x.no)===c.dataset.no && x.role==="bench"),tm); };
+  });
+}
+
+/* ====== モーダル ====== */
+const overlay=document.getElementById('overlay'), modalBody=document.getElementById('modalBody');
+function openModal(p,team){ modalBody.innerHTML=cardHTML(p,team); overlay.classList.add('show'); }
+function closeModal(){ overlay.classList.remove('show'); }
+document.getElementById('closeBtn').onclick=closeModal;
+overlay.onclick=e=>{ if(e.target===overlay) closeModal(); };
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+/* ====== タブ・コントロール ====== */
+const listControls=document.getElementById('listControls'),
+      legendEl=document.querySelector('.legend'),
+      gridEl=document.getElementById('grid'),
+      pitchView=document.getElementById('pitchView');
+document.querySelectorAll('#viewTabs button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('#viewTabs button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    const pitch = b.dataset.view==="pitch";
+    listControls.classList.toggle('hidden',pitch);
+    gridEl.classList.toggle('hidden',pitch);
+    pitchView.classList.toggle('hidden',!pitch);
+    if(pitch) renderPitch();
+  };
 });
-render('ALL');
+document.querySelectorAll('#teamSeg button').forEach(b=>{
+  b.onclick=()=>{ document.querySelectorAll('#teamSeg button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); curTeam=b.dataset.team; renderList(); };
+});
+document.querySelectorAll('#squadSeg button').forEach(b=>{
+  b.onclick=()=>{ document.querySelectorAll('#squadSeg button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); curSquad=b.dataset.squad; renderList(); };
+});
+
+renderList();
 </script>
 </body>
 </html>
